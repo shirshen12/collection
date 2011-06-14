@@ -24,6 +24,10 @@
 # At every step of the program flow, a mail to indicate the job completion step will be sent
 # the system admin group.
 
+# Programmer: Shirshendu Chakrabarti
+# Created at: 2011-June-13
+# Modified  : 2011-June-14
+
 # Import System module dependencies here.
 
 import os
@@ -48,7 +52,7 @@ def main(targetWebsite, configFile):
 
   # Obtain the list of URLs from the above data structure and generate DFTs for all of them.
   
-  
+  pass
   
 
 if __name__ == '__main__':
