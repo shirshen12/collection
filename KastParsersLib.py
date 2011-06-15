@@ -6,6 +6,7 @@
 
 # Import System Module dependencies.
 
+import os
 import urllib2
 import lxml
 import ast
@@ -13,15 +14,13 @@ import ast
 # This function is a config file to Hash data structure converter
 
 def kastConfigFileParser(configFile):
-  
+
   # Check if the configuartion file exists.
 
-  configFileExistenceFlag = checkConfigFileExistence(config_file)
-
-  if not configFileExistenceFlag:
-    return -1
+  if not os.path.exists(config_file):
+    return {}
   else:
-    
+
     # Read the config file and convert it into a continuous string.
 
     f = file(configFile, 'r')
@@ -36,16 +35,28 @@ def kastConfigFileParser(configFile):
     # Check if we have a Hash data structure.
 
     if type(configFileHash) != 'dict':
-      return -1
+      return {}
     else:
       return configFileHash
 
-# This function fetches a URL, reads the HTML string in memory and converts into a 
+# This function populates the first level of URLs that needs to be used by the crawler.
+
+def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
+
+  # Hit the target website.
+
+  try:
+    res = urllib2.Request(targetWebsiteUrl)
+
+    # Shirshendu - Begin here.
+
+  except Exception, err:
+    print err
+    return []
+
+# This function fetches a URL, reads the HTML string in memory and converts into a
 # Discrete Fourier Transform Representation, DFT.
 
 def html2dft(url):
   pass
 
-    
-
-    

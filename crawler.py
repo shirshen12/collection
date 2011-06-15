@@ -32,30 +32,24 @@
 
 # Import System module dependencies here.
 
-import os
-import sys
-import time
-import random
-import urllib2
-import pdb
+import os # Provides OS system calls interface.
+import sys # Provides general system calls interface
+import time # Provides time operations
+import random # Provides random number generation
+import urllib2 # HTTP client library
+import pdb # Debug Module
 
 # Import Internal modules dependencies written by in-house software developers here.
 
-# Custom parsing module with specific parsing functions.
+import KastParsersLib # Custom parsing module with specific parsing functions.
+import KastTimeLib # Handy module with date and time processing functions.
 
-import KastParsersLib
-
-# Handy module with date and time processing functions.
-
-import KastTimeLib
-
-# Global lists of unseen and seen URLs list.
-
-BASE_DIR = '/kast/'
-CRAWL_COPIES_LIMIT = 10
-unseenUrlList = []
-seenUrlList = []
-crawlSuccessFlag = []
+BASE_DIR = '/kast/' # Base directory where all results of subtasks reside for a particular collection task.
+CRAWL_COPIES_LIMIT = 10 # Maximum copies of crawler for a single target that can be enabled
+CRAWL_COPIES_DEFAULT = 3 # Minimum number of crawler copies, if user specified value id missing.
+unseenUrlList = [] # Global list of absolute URLs of a particular website that has to be crawled yet.
+vistedUrlList = [] # Gloabl list of absolute URLs of a particular website that has been crawled.
+crawlSuccessFlag = [] # Identifies if a particular crawler copy failed or succeded.
 
 # This function kickstarts our crawler program.
 
@@ -63,9 +57,16 @@ def main(targetWebsite, configFile):
 
   # List all global variables so that they can be modified and be thread safe
 
+  global unseenUrlList
+  global crawlSuccessFlag
+
   # First read the config file into a Dictionary/Hash structure.
 
   targetWebsiteConfigs = KastParsersLib.kastConfigFileParser(configFile)
+  if targetWebsiteConfigs == {}:
+
+    print 'Target website configs could not extracted. Crawl engine is exiting.'
+    sys.exit(-1)
 
   # Obtain the list of URLs from the above data structure and generate DFTs for all of them.
 
@@ -73,11 +74,16 @@ def main(targetWebsite, configFile):
 
   # Populate the unseenUrlList
 
-  populateUnseenUrlList(targetWebsite)
+  unseenUrlList = populateUnseenUrlList(targetWebsite, unseenUrlList)
+  if unseenUrlList == []:
+    print 'Target Website URL is malformed. Crawl engine is exiting.'
+    sys.exit(-1)
 
   # Start crawling routine, which is multi process routine. So we will first fork 'x' copies of the crawl.
 
-  crawlerCopies = int(targetWebsiteConfigs['CrawlerCopies'])
+  crawlerCopies = CRAWL_COPIES_DEFAULT
+  if targetWebsiteConfigs.has_key('CrawlerCopies'):
+    crawlerCopies = int(targetWebsiteConfigs['CrawlerCopies'])
   child_pids = [os.fork() for i in range(0, crawlerCopies) if crawlerCopies <= CRAWL_COPIES_LIMIT]
   child_pids = [i for i in child_pids if i == 0]
 
@@ -85,7 +91,8 @@ def main(targetWebsite, configFile):
 
   for copy in range(0, len(child_pids)):
 
-    crawlSuccessFlag.append(crawl(dftRepresentations), BASE_DIR)
+    taskSuccessFlag.crawl(dftRepresentations, BASE_DIR)
+    crawlSuccessFlag.append(taskSuccessFlag)
 
   # Apply the CSS rules for scrapping content, this will serve as a simple rule engine template.
 
