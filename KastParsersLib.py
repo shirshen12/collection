@@ -33,8 +33,8 @@ def kastConfigFileParser(configFile):
     configFileHash = ast.literal_eval(configFileContents)
 
     # Check if we have a Hash data structure.
-
-    if type(configFileHash) != 'dict':
+    h = {}
+    if configFileHash.__class__ != h.__class__:
       return {}
     else:
       return configFileHash
@@ -46,7 +46,6 @@ def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
   # Hit the target website.
 
   try:
-    res = urllib2.Request(targetWebsiteUrl)
 
     # Shirshendu - Begin here.
 
