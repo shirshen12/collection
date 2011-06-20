@@ -16,19 +16,18 @@
 #
 # 1. Download the 10 sample URLs and generate Discrete Fourier Transform
 #    representations based on HTML structure.
-# 2. The crawler then starts crawling the web site, does structural evaluation
+# 2. The crawler then starts crawling the web site, performs structural evaluation
 #    of the pages at real-time based on sample URL representations and downloads
 #    the pages and stores them in a compressed format, with timestamp and URL of
 #    the page as its filename.
 # 3. Finally, apply the CSS rules, and extract content and log all that info in a
 #    a log file (http://www.bestbuy.com/crawlresults/<date>/<begin_processing_timestamp>)
 #
-# At every step of the program flow, a mail to indicate the job completion step will be sent
-# the system admin group.
+# At every step of the job completion, notifications will be sent the system admin group.
 
 # Programmer: Shirshendu Chakrabarti
 # Created at: 2011-June-13
-# Modified  : 2011-June-14
+# Modified  : 2011-June-20
 
 # Import System module dependencies here.
 
@@ -48,7 +47,7 @@ BASE_DIR = '/kast/' # Base directory where all results of subtasks reside for a 
 CRAWL_COPIES_LIMIT = 10 # Maximum copies of crawler for a single target that can be enabled
 CRAWL_COPIES_DEFAULT = 3 # Minimum number of crawler copies, if user specified value id missing.
 unseenUrlList = [] # Global list of absolute URLs of a particular website that has to be crawled yet.
-vistedUrlList = [] # Gloabl list of absolute URLs of a particular website that has been crawled.
+vistedUrlList = [] # Global list of absolute URLs of a particular website that has been crawled.
 crawlSuccessFlag = [] # Identifies if a particular crawler copy failed or succeded.
 
 # This function kickstarts our crawler program.
@@ -76,7 +75,7 @@ def main(targetWebsite, configFile):
 
   unseenUrlList = populateUnseenUrlList(targetWebsite, unseenUrlList)
   if unseenUrlList == []:
-    print 'Target Website URL is malformed. Crawl engine is exiting.'
+    print 'Seed URL List is malformed. Crawl engine is exiting.'
     sys.exit(-1)
 
   # Start crawling routine, which is multi process routine. So we will first fork 'x' copies of the crawl.
@@ -91,7 +90,7 @@ def main(targetWebsite, configFile):
 
   for copy in range(0, len(child_pids)):
 
-    taskSuccessFlag.crawl(dftRepresentations, BASE_DIR)
+    taskSuccessFlag = crawl(dftRepresentations, BASE_DIR)
     crawlSuccessFlag.append(taskSuccessFlag)
 
   # Apply the CSS rules for scrapping content, this will serve as a simple rule engine template.
