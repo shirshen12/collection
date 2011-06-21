@@ -61,8 +61,19 @@ def extractHyperlinks(listOfHyperlinks):
 
 # This function canonicalizes relative/absolute URLs to absolute URLs
 
-def convert2AbsoluteHyperlinks(links_a, targetWebsiteUrl)
-  pass
+def convert2AbsoluteHyperlinks(listOfHyperlinks, targetWebsiteUrl)
+
+  r2a = []
+
+  for i in listOfHyperlinks:
+    if i.startswith('http://'):
+      r2a.append(i)
+    elif not i.startswith('http://') and i.startswith('/'):
+      r2a.append(targetWebsiteUrl + i)
+    elif not i.startswith('http://') and not i.startswith('/'):
+      r2a.append(targetWebsiteUrl + '/' + i)
+
+  return r2a
 
 # This function is a config file to Hash data structure converter
 
