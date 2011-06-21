@@ -36,7 +36,7 @@ import string
 
 # This is a helper function to clean HTML content, of all the whitespace.
 
-def clean_html(c):
+def cleanHtml(c):
 
   for whitespace_char in string.whitespace:
     if whitespace_char != ' ':
@@ -89,13 +89,16 @@ def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
     # contruct/reconstruct the HTML template, we dont need to use Tidy/Beautiful
     # Soup parser libraries.
 
-    r = clean_html(r)
+    r = cleanHtml(r)
 
-    # Extract all the <a> or hyperlink elements from the content.
+    # Code to extract all the <a> or hyperlink elements from the content.
 
+    d = pq(r)
+    ele_a = d('a')
 
+    links_a = extractHyperlinks(ele_a)
 
-
+    unseenUrlList = convert2AbsoluteHyperlinks(links_a, targetWebsiteUrl)
 
   except Exception, err:
     print err
