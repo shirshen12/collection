@@ -45,7 +45,7 @@ import KastTimeLib # Handy module with date and time processing functions.
 
 BASE_DIR = '/kast/' # Base directory where all results of subtasks reside for a particular collection task.
 CRAWL_COPIES_LIMIT = 10 # Maximum copies of crawler for a single target that can be enabled
-CRAWL_COPIES_DEFAULT = 3 # Minimum number of crawler copies, if user specified value id missing.
+CRAWL_COPIES_DEFAULT = 1 # Minimum number of crawler copies, if user specified value id missing.
 unseenUrlList = [] # Global list of absolute URLs of a particular website that has to be crawled yet.
 vistedUrlList = [] # Global list of absolute URLs of a particular website that has been crawled.
 crawlSuccessFlag = [] # Identifies if a particular crawler copy failed or succeded.

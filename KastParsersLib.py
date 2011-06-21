@@ -6,10 +6,44 @@
 
 # Import System Module dependencies.
 
-import os
+import os # OS module to avail os system calls independent code.
+import sys # System module to write platform independent code
+import time # Time module for time operations.
+import random # Random module for random number generation and operations.
+
+# HTTP library
+
 import urllib2
+from urllib2 import urlopen
+
+# Extremely fast HTML/XML Parser
+
 import lxml
+from lxml import etree
+
+# String/Literal conversion module
+
 import ast
+
+# CSS Rule engine on the lines of jQuery Javascript library.
+
+import pyquery
+from pyquery import PyQuery as pq
+
+# String Module for specialized string operations.
+
+import string
+
+# This is a helper function to clean HTML content, of all the whitespace.
+
+def clean_html(c):
+
+  for whitespace_char in string.whitespace:
+    if whitespace_char != ' ':
+      c = c.split(whitespace_char)
+      c = ''.join(c)
+
+  return c
 
 # This function is a config file to Hash data structure converter
 
@@ -43,11 +77,25 @@ def kastConfigFileParser(configFile):
 
 def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
 
-  # Hit the target website.
-
   try:
 
-    # Shirshendu - Begin here.
+    # Hit the target website.
+
+    res = urlopen(targetWebsiteUrl)
+    r = res.read()
+    res.close()
+
+    # Clean and canonicalize the HTML content. Since dynamic generation engines
+    # contruct/reconstruct the HTML template, we dont need to use Tidy/Beautiful
+    # Soup parser libraries.
+
+    r = clean_html(r)
+
+    # Extract all the <a> or hyperlink elements from the content.
+
+
+
+
 
   except Exception, err:
     print err
