@@ -45,6 +45,25 @@ def cleanHtml(c):
 
   return c
 
+# This function extracts all the hyperlinks out of a clean HTML string.
+
+def extractHyperlinks(listOfHyperlinks):
+
+  extractedHyperlinks = []
+
+  for l in listOfHyperlinks:
+    attr = l.items()
+    for m in attr:
+      if m[0] == 'href':
+        extractedHyperlinks.append(m[1])
+
+  return extractedHyperlinks
+
+# This function canonicalizes relative/absolute URLs to absolute URLs
+
+def convert2AbsoluteHyperlinks(links_a, targetWebsiteUrl)
+  pass
+
 # This function is a config file to Hash data structure converter
 
 def kastConfigFileParser(configFile):
@@ -93,12 +112,20 @@ def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
 
     # Code to extract all the <a> or hyperlink elements from the content.
 
+    # Convert html --> DOM object for extracting hyperlinks
+
     d = pq(r)
     ele_a = d('a')
 
+    # Extract the hyperlinks
+
     links_a = extractHyperlinks(ele_a)
 
+    # Convert to absolute links.
+
     unseenUrlList = convert2AbsoluteHyperlinks(links_a, targetWebsiteUrl)
+
+    return unseenUrlList
 
   except Exception, err:
     print err
