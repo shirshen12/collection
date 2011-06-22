@@ -38,6 +38,25 @@ import string
 
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.20 Safari/535.1'
 
+# This is a helper function which fetches url
+
+def fetchURL(url):
+
+  try:
+
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', USER_AGENT)
+    res = urllib2.urlopen(req)
+    r = res.read()
+    res.close()
+
+    return r
+
+  except Exception, err:
+
+    print str(err)
+    return ''
+
 # This is a helper function to clean HTML content, of all the whitespace.
 
 def cleanHtml(c):
@@ -113,21 +132,15 @@ def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
 
   try:
 
-    # Hit the target website.
+    # Hit the target website and fetch the HTML.
 
-    req = urllib2.Request(targetWebsiteUrl)
-    req.add_header('User-Agent', USER_AGENT)
-    res = urllib2.urlopen(req)
-    r = res.read()
-    res.close()
+    r = fetchURL(targetWebsiteUrl)
 
     # Clean and canonicalize the HTML content. Since dynamic generation engines
     # contruct/reconstruct the HTML template, we dont need to use Tidy/Beautiful
     # Soup parser libraries.
 
     r = cleanHtml(r)
-
-    # Code to extract all the <a> or hyperlink elements from the content.
 
     # Convert html --> DOM object for extracting hyperlinks
 
@@ -152,5 +165,6 @@ def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
 # Discrete Fourier Transform Representation, DFT.
 
 def html2dft(url):
-  pass
+
+  # First fetch the url, clean it and obtain the clean HTML string.
 
