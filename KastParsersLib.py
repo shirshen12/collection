@@ -166,5 +166,13 @@ def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
 
 def html2dft(url):
 
-  # First fetch the url, clean it and obtain the clean HTML string.
+  # First fetch the url.
+
+  r = fetchURL(url)
+
+  # Clean the HTML content.
+
+  r = cleanHtml(r)
+
+  # Strip the html page of any content.
 
