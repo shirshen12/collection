@@ -65,7 +65,7 @@ def extractHyperlinks(listOfHyperlinks):
 
 # This function canonicalizes relative/absolute URLs to absolute URLs
 
-def convert2AbsoluteHyperlinks(listOfHyperlinks, targetWebsiteUrl)
+def convert2AbsoluteHyperlinks(listOfHyperlinks, targetWebsiteUrl):
 
   r2a = []
 
