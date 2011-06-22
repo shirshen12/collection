@@ -98,6 +98,22 @@ def convert2AbsoluteHyperlinks(listOfHyperlinks, targetWebsiteUrl):
 
   return r2a
 
+# This function strips the content off HTML pages and returns a tag set.
+
+def getTagSet(r):
+
+  # Define a variable for temporary storage of tags encountered.
+  # Flag to signify if we are in a tag or not.
+  # Finally an array of tuples which signify the position of this tag
+  # in the HTML page.
+
+  tmp_tag = ''
+  html_array = []
+
+  for i in r:
+    if i == '<':
+      flag = 1
+
 # This function is a config file to Hash data structure converter
 
 def kastConfigFileParser(configFile):
@@ -174,5 +190,8 @@ def html2dft(url):
 
   r = cleanHtml(r)
 
-  # Strip the html page of any content.
+  # Strip the html page of any content and get a tupleof tags
+  # <p>Hi!</p> --> [(1, p)]
+
+  r_tags = getTagSet(r)
 
