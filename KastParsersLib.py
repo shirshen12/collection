@@ -34,6 +34,10 @@ from pyquery import PyQuery as pq
 
 import string
 
+# Debug module
+
+import pdb
+
 # Global User Agent String
 
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.20 Safari/535.1'
@@ -109,10 +113,28 @@ def getTagSet(r):
 
   tmp_tag = ''
   html_array = []
+  flag = 0
+  count = 0
+
+  pdb.set_trace()
 
   for i in r:
-    if i == '<':
-      flag = 1
+   if i == '<':
+     flag = 1
+     tmp_tag = tmp_tag + i
+   elif flag == 1 and i == '<':
+     tmp_tag = ''
+     tmp_tag = tmp_tag + i
+   elif flag == 1 and i == '>':
+     tmp_tag = tmp_tag + i
+     count = count + 1
+     html_array.append((count, tmp_tag))
+     flag = 0
+     tmp_tag = ''
+   elif flag == 1:
+     tmp_tag = tmp_tag + i
+
+  return html_array
 
 # This function is a config file to Hash data structure converter
 
