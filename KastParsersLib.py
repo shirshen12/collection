@@ -34,6 +34,10 @@ from pyquery import PyQuery as pq
 
 import string
 
+# Debug module
+
+import pdb
+
 # Global User Agent String
 
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.20 Safari/535.1'
@@ -109,10 +113,26 @@ def getTagSet(r):
 
   tmp_tag = ''
   html_array = []
+  flag = 0
+  count = 0
 
   for i in r:
-    if i == '<':
-      flag = 1
+   if i == '<':
+     flag = 1
+     tmp_tag = tmp_tag + i
+   elif flag == 1 and i == '>':
+     tmp_tag = tmp_tag + i
+     count = count + 1
+     html_array.append((count, tmp_tag))
+     flag = 0
+     tmp_tag = ''
+   elif flag == 1 and i == '<':
+     tmp_tag = ''
+     tmp_tag = tmp_tag + i
+   elif flag == 1:
+     tmp_tag = tmp_tag + i
+
+  return html_array
 
 # This function is a config file to Hash data structure converter
 
@@ -180,6 +200,16 @@ def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
 # This function fetches a URL, reads the HTML string in memory and converts into a
 # Discrete Fourier Transform Representation, DFT.
 
+# This algorithm for web page classification has been adapted from:
+# 1. Exploiting Structural Similarity for Effective Web Information Extraction by Flesca et al.,
+# 2. Fast detection of XML structural similarity by Flesca et al.,
+
+# The algorithm flow is as follows:
+# 1. Fetch the target URL
+# 2. Clean the HTML content, strip it of all whitespaces.
+# 3. Generate the tag list, maintain the order in which they occur in the HTML page.
+
+# Commit -m "Added comments. Basicallt dont commit Shir"
 def html2dft(url):
 
   # First fetch the url.
