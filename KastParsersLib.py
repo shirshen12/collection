@@ -34,6 +34,11 @@ from pyquery import PyQuery as pq
 
 import string
 
+# BeautifulSoup module to tidy the HTML.
+
+import BeautifulSoup
+from BeautifulSoup import BeautifulSoup
+
 # Debug module
 
 import pdb
@@ -117,20 +122,20 @@ def getTagSet(r):
   count = 0
 
   for i in r:
-   if i == '<':
-     flag = 1
-     tmp_tag = tmp_tag + i
-   elif flag == 1 and i == '>':
-     tmp_tag = tmp_tag + i
-     count = count + 1
-     html_array.append((count, tmp_tag))
-     flag = 0
-     tmp_tag = ''
-   elif flag == 1 and i == '<':
-     tmp_tag = ''
-     tmp_tag = tmp_tag + i
-   elif flag == 1:
-     tmp_tag = tmp_tag + i
+    if i == '<':
+      flag = 1
+      tmp_tag = tmp_tag + i
+    elif flag == 1 and i == '>':
+      tmp_tag = tmp_tag + i
+      count = count + 1
+      html_array.append((count, tmp_tag))
+      flag = 0
+      tmp_tag = ''
+    elif flag == 1 and i == '<':
+      tmp_tag = ''
+      tmp_tag = tmp_tag + i
+    elif flag == 1:
+      tmp_tag = tmp_tag + i
 
   return html_array
 
@@ -217,6 +222,14 @@ def html2dft(url):
   r = fetchURL(url)
 
   # Clean the HTML content.
+
+  r = cleanHtml(r)
+
+  # Get a well-formed HTML using BeautifulSoup.
+
+  r = BeautifulSoup(r).prettify()
+
+  # Clean the HTML if any whitespace has been introduced.
 
   r = cleanHtml(r)
 
