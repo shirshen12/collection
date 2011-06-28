@@ -164,6 +164,11 @@ def convertShortHandTags(lt):
 
   return r_tags
 
+# This function is used to identify start tags, end tags and comment tags.
+
+def tagIdentifier(tl):
+  pass
+
 # This function is a config file to Hash data structure converter
 
 def kastConfigFileParser(configFile):
@@ -267,4 +272,8 @@ def html2dft(url):
   # <br /> --> <br></br>
 
   r_tags = convertShortHandTags(r_tags)
+
+  # Now process for tag marking, identify start tags, end tags and comment tags.
+
+  r_tags = tagIdentifier(r_tags)
 
