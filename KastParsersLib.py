@@ -140,6 +140,30 @@ def getTagSet(r):
 
   return html_array
 
+# Convert short hand tags to full legitimate tags.
+
+def convertShortHandTags(lt):
+
+  # This code converts tags as outlined in the function header.
+
+  pdb.set_trace()
+
+  convertedTagSet = []
+
+  for i in lt:
+    tbct = i[1]
+    converted_tag = tbct.split('/>')[0].strip() + '>' + '</' + tbct.split('/>')[0].strip().split('<')[1].strip() + '>
+    convertedTagSet.append(converted_tag)
+
+  # Now, again convert the malformed HTML string. This is just to be precise.
+
+  r = ''.join(convertedTagSet) # Get the HTML string
+  r = BeautifulSoup(r).prettify() # Eliminate malformed HTML string.
+  r = cleanHtml(r) # Clean the HTML string.
+  r_tags = getTagSet(r)# Generate tag Set for next stage.
+
+  return r_tags
+
 # This function is a config file to Hash data structure converter
 
 def kastConfigFileParser(configFile):
@@ -238,4 +262,9 @@ def html2dft(url):
   # <p>Hi!</p> --> [(1, p)]
 
   r_tags = getTagSet(r)
+
+  # Convert all short hand tags which end with < /> to full tag set features
+  # <br /> --> <br></br>
+
+  r_tags = convertShortHandTags(r_tags)
 
