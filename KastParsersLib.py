@@ -167,7 +167,18 @@ def convertShortHandTags(lt):
 # This function is used to identify start tags, end tags and comment tags.
 
 def tagIdentifier(tl):
-  pass
+
+  tagMarkedArray = []
+
+  for t in tl:
+    if t[1].startswith('</'):
+      tagMarkedArray.append((t[0], t[1], 'ele'))
+    elif t[1].startswith('<!'):
+      tagMarkedArray.append((t[0], t[1], 'elc'))
+    else:
+      tagMarkedArray.append((t[0], t[1], 'els'))
+
+  return tagMarkedArray
 
 # This function is a config file to Hash data structure converter
 
@@ -274,6 +285,7 @@ def html2dft(url):
   r_tags = convertShortHandTags(r_tags)
 
   # Now process for tag marking, identify start tags, end tags and comment tags.
+  # <html> --> els, </html> --> ele, <!-- comment --> --> elc
 
   r_tags = tagIdentifier(r_tags)
 
