@@ -146,8 +146,6 @@ def convertShortHandTags(lt):
 
   # This code converts tags as outlined in the function header.
 
-  pdb.set_trace()
-
   convertedTagSet = []
 
   for i in lt:
@@ -163,6 +161,12 @@ def convertShortHandTags(lt):
   r_tags = getTagSet(r)# Generate tag Set for next stage.
 
   return r_tags
+
+# This function converts the attributes in tags.
+
+def convertAttributes2Tag(r_tags):
+
+  pass
 
 # This function is used to identify start tags, end tags and comment tags.
 
@@ -284,8 +288,20 @@ def html2dft(url):
 
   r_tags = convertShortHandTags(r_tags)
 
+  # Convert the attributes also into tags <a href="/"> --> <a>, <ATTRIB@href>,
+  # </ATTRIB@href>
+
+  r_tags = convertAttributes2Tag(r_tags)
+
   # Now process for tag marking, identify start tags, end tags and comment tags.
   # <html> --> els, </html> --> ele, <!-- comment --> --> elc
 
   r_tags = tagIdentifier(r_tags)
+
+  # Now perform a tag encoding process where every tag is assigned a number based in its
+  # nesting. This nesting is calculated based on how many start tag have been encountered
+  # while traversing back to the top. All comment tags are not considered and assigned a
+  # value 0. In this way we are doing tag encoding
+
+  r_tags = tagEncoder(r_tags)
 
