@@ -34,11 +34,15 @@ from pyquery import PyQuery as pq
 
 import string
 
-
 # BeautifulSoup module to tidy the HTML.
 
 import BeautifulSoup
 from BeautifulSoup import BeautifulSoup
+
+# numpy module to calculate the dft using the fft representation.
+
+import numpy
+from numpy import fft
 
 # Debug module
 
@@ -206,8 +210,6 @@ def convertAttributes2Tag(r_tags):
 
   return r_tags
 
-
-
 # This function is used to identify start tags, end tags and comment tags.
 
 def tagIdentifier(tl):
@@ -223,6 +225,11 @@ def tagIdentifier(tl):
       tagMarkedArray.append((t[0], t[1], 'els'))
 
   return tagMarkedArray
+
+# This function performs the tag encoding of the html series.
+
+def tagEncoder(rt):
+  pass
 
 # This function is a config file to Hash data structure converter
 
@@ -344,4 +351,8 @@ def html2dft(url):
   # value 0. In this way we are doing tag encoding
 
   r_tags = tagEncoder(r_tags)
+
+  # Now get the single dimension real-number based DFT
+
+  # ---
 
