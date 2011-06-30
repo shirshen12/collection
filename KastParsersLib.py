@@ -166,7 +166,34 @@ def convertShortHandTags(lt):
 
 def convertAttributes2Tag(r_tags):
 
-  pass
+  attrTagList = []
+
+  for t in r_tags:
+    if t[1].startswith('</'):
+      attrTagList.append(t[1])
+    elif t[1].startswith('<!'):
+      attrTagList.append(t[1])
+    else:
+      y = t[1].split(' ')
+      for i in y:
+        if i.startswith('<'):
+          attrTagList.append(i.strip() + '>')
+        elif i.endswith('>'):
+          tmp = i.split('>')[0].strip()
+          if tmp.__contains__('='):
+            tmp_tagname = tmp.split('=')[0].strip()
+            tmp_start = '<ATTRIB@' + tmp_tagname + '>'
+            attrTagList.append(tmp_start)
+            tmp_end = '</ATTRIB@' + tmp_tagname + '>'
+            attrTagList.append(tmp_end)
+        elif i.__contains__('='):
+          tmp_tagname = tmp.split('=')[0].strip()
+          tmp_start = '<ATTRIB@' + tmp_tagname + '>'
+          attrTagList.append(tmp_start)
+          tmp_end = '</ATTRIB@' + tmp_tagname + '>'
+          attrTagList.append(tmp_end)
+
+  return attrTagList
 
 # This function is used to identify start tags, end tags and comment tags.
 
