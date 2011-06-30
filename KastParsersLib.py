@@ -150,7 +150,7 @@ def convertShortHandTags(lt):
 
   for i in lt:
     tbct = i[1]
-    converted_tag = tbct.split('/>')[0].strip() + '>' + '</' + tbct.split('/>')[0].strip().split('<')[1].strip() + '>
+    converted_tag = tbct.split('/>')[0].strip() + '>' + '</' + tbct.split('/>')[0].strip().split('<')[1].strip() + '>'
     convertedTagSet.append(converted_tag)
 
   # Now, again convert the malformed HTML string. This is just to be precise.
@@ -187,13 +187,20 @@ def convertAttributes2Tag(r_tags):
             tmp_end = '</ATTRIB@' + tmp_tagname + '>'
             attrTagList.append(tmp_end)
         elif i.__contains__('='):
-          tmp_tagname = tmp.split('=')[0].strip()
+          tmp_tagname = i.split('=')[0].strip()
           tmp_start = '<ATTRIB@' + tmp_tagname + '>'
           attrTagList.append(tmp_start)
           tmp_end = '</ATTRIB@' + tmp_tagname + '>'
           attrTagList.append(tmp_end)
 
-  return attrTagList
+  r = ''.join(attrTagList) # Get the HTML string
+  r = BeautifulSoup(r).prettify() # Eliminate malformed HTML string.
+  r = cleanHtml(r) # Clean the HTML string.
+  r_tags = getTagSet(r)# Generate tag Set for next stage.
+
+  return r_tags
+
+
 
 # This function is used to identify start tags, end tags and comment tags.
 
