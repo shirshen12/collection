@@ -149,9 +149,15 @@ def convertShortHandTags(lt):
   convertedTagSet = []
 
   for i in lt:
-    tbct = i[1]
-    converted_tag = tbct.split('/>')[0].strip() + '>' + '</' + tbct.split('/>')[0].strip().split('<')[1].strip() + '>'
-    convertedTagSet.append(converted_tag)
+    if not i[1].endswith('/>'):
+      convertedTagSet.append(i)
+    elif i[1].endswith('/>'):
+      tbct = i[1].split('/>')
+      convertedStartTag = tbct[0].strip() + '>' + '</' + tbct[0].strip().split('<')[1].strip() + '>'
+      convertedTagSet.append(convertedStartTag)
+      endTag = tbct[0].split('<')[1].strip()
+      convertedEndTag = '</' + endTag + '>'
+      convertedTagSet.append(convertedEndTag)
 
   # Now, again convert the malformed HTML string. This is just to be precise.
 
