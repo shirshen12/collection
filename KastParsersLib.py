@@ -75,6 +75,8 @@ def fetchURL(url):
 
 def cleanHtml(c):
 
+  c = c.strip()
+
   for whitespace_char in string.whitespace:
     if whitespace_char != ' ':
       c = c.split(whitespace_char)
