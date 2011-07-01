@@ -226,10 +226,45 @@ def tagIdentifier(tl):
 
   return tagMarkedArray
 
-# This function performs the tag encoding of the html series.
+# This function returns the position hash, which is used in tag encoding.
+
+def getTagSetPositionStructure(tt):
+
+  tagHash = {}
+
+  posn = 0
+
+  for i in tt:
+    if i[2] != 'elc' or i[2] != 'ele':
+      if not tagHash.has_key(i[1]):
+        posn = posn + 1
+        tagHash[i[1]] = posn
+
+  return tagHash
+
+# This function performs the tag encoding of the html series. The encoding is based on
+# linear random assignment of numbers, all natural numbers.
 
 def tagEncoder(rt):
-  pass
+
+  # First obtain a dictionary of tagnames and their positions. This will help in
+  # assigning amplitudes as values.
+
+  tnamesHash = getTagSetPositionStructure(rt)
+
+  # Now get the series, an array of numbers.
+
+  tagEncodedHtmlSeries = []
+
+  for i in rt:
+    if i[2] == 'elc':
+      tagEncodedHtmlSeries.append(0)
+    elif i[2] == 'ele':
+      tagEncodedHtmlSeries.append(0)
+    elif i[2] == 'els':
+      tagEncodedHtmlSeries.append(int(tnamesHash[i[2]]))
+
+  return tagEncodedHtmlSeries
 
 # This function is a config file to Hash data structure converter
 
@@ -352,7 +387,10 @@ def html2dft(url):
 
   r_tags = tagEncoder(r_tags)
 
-  # Now get the single dimension real-number based DFT
+  # Now apply document encoding and since we do trivial document encoding, its the same
+  # series
 
-  # ---
+  documentEncodedHtmlSeries = r_tags
+
+  # Now get the single dimension real-number based DFT -- research this a bit
 
