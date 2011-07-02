@@ -34,11 +34,6 @@ from pyquery import PyQuery as pq
 
 import string
 
-# BeautifulSoup module to tidy the HTML.
-
-import BeautifulSoup
-from BeautifulSoup import BeautifulSoup
-
 # numpy module to calculate the dft using the fft representation.
 
 import numpy
@@ -366,14 +361,6 @@ def html2dft(url):
   r = fetchURL(url)
 
   # Clean the HTML content.
-
-  r = cleanHtml(r)
-
-  # Get a well-formed HTML using BeautifulSoup.
-
-  r = BeautifulSoup(r).prettify()
-
-  # Clean the HTML if any whitespace has been introduced.
 
   r = cleanHtml(r)
 
