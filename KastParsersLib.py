@@ -155,13 +155,28 @@ def convertShortHandTags(lt):
   convertedTagSet = []
 
   for i in lt:
+
+    # Check if its a shorthand tag, e.g., <br />
+
     if not i[1].endswith('/>'):
-      convertedTagSet.append(i)
+
+      # If its not, its a normal tag (start or end) and just append to tag set.
+
+      convertedTagSet.append(i[1])
     elif i[1].endswith('/>'):
+
+      # If it is, then process it such that it is converted from <br /> --> <br></br>
+
       tbct = i[1].split('/>')
-      convertedStartTag = tbct[0].strip() + '>' + '</' + tbct[0].strip().split('<')[1].strip() + '>'
+      convertedStartTag = tbct[0].strip() + '>'
       convertedTagSet.append(convertedStartTag)
+
+      # Since start tags can have attributes as well <img src='' />, we need to be careful
+      # in converting them, since end tags have no attributes.
+      # So, <img src='example.png' /> --> <img src='example.png'></img>
+
       endTag = tbct[0].split('<')[1].strip()
+      endTag = endTag.split(' ')[0]
       convertedEndTag = '</' + endTag + '>'
       convertedTagSet.append(convertedEndTag)
 
