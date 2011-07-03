@@ -177,7 +177,6 @@ def convertShortHandTags(lt):
   # Now, again convert the malformed HTML string. This is just to be precise.
 
   r = ''.join(convertedTagSet) # Get the HTML string
-  r = BeautifulSoup(r).prettify() # Eliminate malformed HTML string.
   r = cleanHtml(r) # Clean the HTML string.
   r_tags = getTagSet(r)# Generate tag Set for next stage.
 
@@ -215,7 +214,6 @@ def convertAttributes2Tag(r_tags):
           attrTagList.append(tmp_end)
 
   r = ''.join(attrTagList) # Get the HTML string
-  r = BeautifulSoup(r).prettify() # Eliminate malformed HTML string.
   r = cleanHtml(r) # Clean the HTML string.
   r_tags = getTagSet(r)# Generate tag Set for next stage.
 
@@ -282,9 +280,30 @@ def tagEncoder(rt):
 
 def sanitizeScriptTags(rt):
 
+  # Collect the tags which have are correct.
+
   sanitizedTags = []
+  insideScriptTagContent = 0
 
   for i in rt:
+    if i[1].startswith('<script') and i[1].endswith('/>'):
+      sanitizedTags.append(i[1])
+    elif i[1].startswith('<script') and not i[1].endswith('/>'):
+      # Skip all the elements in between.
+      sanitizedTags.append(i[1])
+      insideScriptTagContent = 1
+    elif i[1].startswith('</script') and insideScriptTagContent == 1:
+      sanitizedTags.append(i[1])
+      insideScriptTagContent = 0
+    elif insideScriptTagContent == 0:
+      sanitizedTags.append(i[1])
+
+  # Now obtain the tagset again.
+
+  r = ''.join(sanitizedTags) # Get the HTML string
+  r = cleanHtml(r) # Clean the HTML string.
+  r_tags = getTagSet(r)# Generate tag Set for next stage.
+  return r_tags
 
 
 # This function is a config file to Hash data structure converter
