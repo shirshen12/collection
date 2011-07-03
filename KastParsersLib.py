@@ -138,7 +138,6 @@ def getTagSet(r):
       tmp_tag = tmp_tag + i
     elif flag == 1:
       tmp_tag = tmp_tag + i
-
   return html_array
 
 # Convert short hand tags to full legitimate tags.
@@ -278,6 +277,16 @@ def tagEncoder(rt):
 
   return tagEncodedHtmlSeries
 
+# This function deals with html script tags so that html series generation is not done in
+# a bad manner.
+
+def sanitizeScriptTags(rt):
+
+  sanitizedTags = []
+
+  for i in rt:
+
+
 # This function is a config file to Hash data structure converter
 
 def kastConfigFileParser(configFile):
@@ -368,6 +377,11 @@ def html2dft(url):
   # <p>Hi!</p> --> [(1, p)]
 
   r_tags = getTagSet(r)
+
+  # Deal with <script> tags separately, so that we dont have to deal with malformed
+  # html
+
+  r_tags = sanitizeScriptTags(r_tags)
 
   # Convert all short hand tags which end with < /> to full tag set features
   # <br /> --> <br></br>
