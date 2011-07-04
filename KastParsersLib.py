@@ -244,10 +244,13 @@ def getTagSetPositionStructure(tt):
   posn = 0
 
   for i in tt:
-    if i[2] != 'elc' or i[2] != 'ele':
-      if not tagHash.has_key(i[1]):
-        posn = posn + 1
-        tagHash[i[1]] = posn
+    if i[2] == 'elc' or i[2] == 'ele':
+      continue
+    elif not tagHash.has_key(i[1]):
+      posn = posn + 1
+      tagHash[i[1]] = posn
+
+  print tagHash
 
   return tagHash
 
@@ -271,7 +274,7 @@ def tagEncoder(rt):
     elif i[2] == 'ele':
       tagEncodedHtmlSeries.append(0)
     elif i[2] == 'els':
-      tagEncodedHtmlSeries.append(int(tnamesHash[i[2]]))
+      tagEncodedHtmlSeries.append(int(tnamesHash[i[1]]))
 
   return tagEncodedHtmlSeries
 
@@ -429,5 +432,7 @@ def html2dft(url):
 
   documentEncodedHtmlSeries = r_tags
 
-  # Now get the single dimension real-number based DFT -- research this a bit
+  # Now get the single dimension real-number based DFT, calculate this using FFT
+
+  print 'wait'
 
