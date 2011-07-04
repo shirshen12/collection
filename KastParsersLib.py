@@ -385,7 +385,7 @@ def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
 # 3. Generate the tag list, maintain the order in which they occur in the HTML page.
 
 # Commit -m "Added comments. Basicallt dont commit Shir"
-def html2dft(url):
+def html2signal(url):
 
   # First fetch the url.
 
@@ -432,10 +432,5 @@ def html2dft(url):
 
   documentEncodedHtmlSeries = r_tags
 
-  # Calculate the DFT using FFT
-
-  htmlSignal = array(documentEncodedHtmlSeries)
-  htmldft = fft(htmlSignal)
-
-  return htmldft
+  return documentEncodedHtmlSeries
 
