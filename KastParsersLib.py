@@ -37,7 +37,9 @@ import string
 # numpy module to calculate the dft using the fft representation.
 
 import numpy
+from numpy import *
 from numpy import fft
+from numpy.fft import *
 
 # Debug module
 
@@ -250,8 +252,6 @@ def getTagSetPositionStructure(tt):
       posn = posn + 1
       tagHash[i[1]] = posn
 
-  print tagHash
-
   return tagHash
 
 # This function performs the tag encoding of the html series. The encoding is based on
@@ -432,7 +432,10 @@ def html2dft(url):
 
   documentEncodedHtmlSeries = r_tags
 
-  # Now get the single dimension real-number based DFT, calculate this using FFT
+  # Calculate the DFT using FFT
 
-  print 'wait'
+  htmlSignal = array(documentEncodedHtmlSeries)
+  htmldft = fft(htmlSignal)
+
+  return htmldft
 
