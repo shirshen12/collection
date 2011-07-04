@@ -434,3 +434,59 @@ def html2signal(url):
 
   return documentEncodedHtmlSeries
 
+# This function calculates the dft distance between two html documents and returns a score
+# of similarity.
+
+def dftDistance(d1, d2):
+
+  # First we interpolate the signal in time domain and then zero pad for signals of
+  # unequal length.
+
+  d1_l = len(d1)
+  d2_l = len(d2)
+
+  # Now get the 'M' value, the combined value of the length of both the signals.
+
+  M = 0
+  if d1_l == d2_l:
+    M = d1_l
+  else:
+    M = (d1_l + d2_l) - 1
+
+    # Also do zero padding at the same time.
+
+    # Calculate the extent of padding to be done, for both the series.
+
+    fsl = M - d1_l
+    ssl = M - d2_l
+
+    # Now pad first series.
+
+    for i in range(0, fsl):
+      d1.append(0)
+
+    # Now pad second series.
+
+    for j in range(0, ssl):
+      d2.append(0)
+
+  # Now calculate dft for both the series.
+
+  d1_dft = fft(array(d1))
+  d2_dft = fft(array(d2))
+
+  # Now calculate the energy difference between two html signals.
+
+  dft_sum = 0
+  for k in range(0, M):
+    ds = (abs(d1_dft(k)) - abs(d2_dft(k)))**2
+    dft_sum = dft_sum + ds
+
+  htmlDistance = math.sqrt(dft_sum)
+
+  # Now calculate the similarity measure.
+
+  similarityMeasure = 1/(1 + htmlDistance)
+
+  return similarityMeasure
+
