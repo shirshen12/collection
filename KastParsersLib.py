@@ -246,35 +246,31 @@ def getTagSetPositionStructure(tt):
   posn = 0
 
   for i in tt:
-    if i[2] == 'elc' or i[2] == 'ele':
-      continue
-    elif not tagHash.has_key(i[1]):
+    elif not tagHash.has_key(i):
       posn = posn + 1
-      tagHash[i[1]] = posn
+      tagHash[i] = posn
 
   return tagHash
 
 # This function performs the tag encoding of the html series. The encoding is based on
 # linear random assignment of numbers, all natural numbers.
 
-def tagEncoder(rt):
+def tagEncoder(tnames, rt):
 
   # First obtain a dictionary of tagnames and their positions. This will help in
   # assigning amplitudes as values.
 
-  tnamesHash = getTagSetPositionStructure(rt)
+  tnamesHash = getTagSetPositionStructure(tnames)
 
   # Now get the series, an array of numbers.
 
   tagEncodedHtmlSeries = []
 
   for i in rt:
-    if i[2] == 'elc':
-      tagEncodedHtmlSeries.append(0)
+    if i[2] == 'els':
+      tagEncodedHtmlSeries.append(int(tnamesHash[i[1]]))
     elif i[2] == 'ele':
       tagEncodedHtmlSeries.append(0)
-    elif i[2] == 'els':
-      tagEncodedHtmlSeries.append(int(tnamesHash[i[1]]))
 
   return tagEncodedHtmlSeries
 
@@ -468,6 +464,12 @@ def dftDistance(rt1, rt2):
   # Calculate the unique tname set for both the documents
 
   tnames = getUniqueTagSet(rt1, rt2)
+
+  # Now get assign scores or numbers based on positional identification.
+
+  htmlseries1 = tagEncoder(tanames, rt1)
+  htmlseries2 = tagEncoder(tanames, rt2)
+
 
   # First we interpolate the signal in time domain and then zero pad for signals of
   # unequal length.
