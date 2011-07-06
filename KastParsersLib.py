@@ -322,6 +322,26 @@ def removeCommentTags(rt):
 
   return tagSeries
 
+# Get the unique tag set for two documents to be compared.
+
+def getUniqueTagSet(rt1, rt2):
+
+  listOfTags = []
+
+  for i in rt1:
+    if i[2] == 'els':
+      listOfTags.append(i[1])
+
+  for j in rt2:
+    if j[2] == 'els':
+      listOfHyperlinks.append(i[1])
+
+  # Now convert them into a set
+
+  setOfTags = list(set(listOfTags))
+
+  return setOfTags
+
 # This function is a config file to Hash data structure converter
 
 def kastConfigFileParser(configFile):
@@ -447,7 +467,7 @@ def dftDistance(rt1, rt2):
 
   # Calculate the unique tname set for both the documents
 
-
+  tnames = getUniqueTagSet(rt1, rt2)
 
   # First we interpolate the signal in time domain and then zero pad for signals of
   # unequal length.
