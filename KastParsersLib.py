@@ -385,7 +385,7 @@ def populateUnseenUrlList(targetWebsiteUrl, unseenUrlList):
 # 3. Generate the tag list, maintain the order in which they occur in the HTML page.
 
 # Commit -m "Added comments. Basicallt dont commit Shir"
-def html2signal(url):
+def html2TagSignal(url):
 
   # First fetch the url.
 
@@ -420,19 +420,7 @@ def html2signal(url):
 
   r_tags = tagIdentifier(r_tags)
 
-  # Now perform a tag encoding process where every tag is assigned a number based in its
-  # nesting. This nesting is calculated based on how many start tag have been encountered
-  # while traversing back to the top. All comment tags are not considered and assigned a
-  # value 0. In this way we are doing tag encoding
-
-  r_tags = tagEncoder(r_tags)
-
-  # Now apply document encoding and since we do trivial document encoding, its the same
-  # series
-
-  documentEncodedHtmlSeries = r_tags
-
-  return documentEncodedHtmlSeries
+  return r_tags
 
 # This function calculates the dft distance between two html documents and returns a score
 # of similarity.
@@ -475,14 +463,25 @@ def dftDistance(d1, d2):
   d1_dft = fft(array(d1))
   d2_dft = fft(array(d2))
 
+  # Convert from numpy array object to normal python array
+
+  d1_dft = list(d1_dft)
+  d2_dft = list(d2_dft)
+
+  # Scale the dft's by sqrt(M)
+
+  d1_dft = [float(i)/math.sqrt(M) for i in d1_dft]
+  d2_dft = [float(j)/math.sqrt(M) for j in d1_dft]
+
+
   # Now calculate the energy difference between two html signals.
 
-  dft_sum = 0
+  e_diff = 0
   for k in range(0, M):
-    ds = (abs(d1_dft(k)) - abs(d2_dft(k)))**2
-    dft_sum = dft_sum + ds
+    etemp = (abs(d1_dft[k] - d2_dft[k]))**2
+    e_diff = e_diff + etemp
 
-  htmlDistance = math.sqrt(dft_sum)
+  htmlDistance = math.sqrt(abs(e_diff))
 
   # Now calculate the similarity measure.
 
