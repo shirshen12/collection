@@ -308,6 +308,19 @@ def sanitizeScriptTags(rt):
   r_tags = getTagSet(r)# Generate tag Set for next stage.
   return r_tags
 
+# This function removes all the useless comment tags not required in the tag series.
+
+def removeCommentTags(rt):
+
+  tagSeries = []
+
+  for i in rt:
+    if i[2] == 'elc':
+      continue
+    else:
+      tagSeries.append(i)
+
+  return tagSeries
 
 # This function is a config file to Hash data structure converter
 
@@ -420,12 +433,21 @@ def html2TagSignal(url):
 
   r_tags = tagIdentifier(r_tags)
 
+  # Now remove the comment tags, they dont contribute to the html series and distort
+  # the score.
+
+  r_tags = removeCommentTags(r_tags)
+
   return r_tags
 
 # This function calculates the dft distance between two html documents and returns a score
 # of similarity.
 
-def dftDistance(d1, d2):
+def dftDistance(rt1, rt2):
+
+  # Calculate the unique tname set for both the documents
+
+
 
   # First we interpolate the signal in time domain and then zero pad for signals of
   # unequal length.
