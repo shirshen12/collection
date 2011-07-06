@@ -270,7 +270,10 @@ def tagEncoder(tnames, rt):
     if i[2] == 'els':
       tagEncodedHtmlSeries.append(int(tnamesHash[i[1]]))
     elif i[2] == 'ele':
-      tagEncodedHtmlSeries.append(0)
+      tempEndTag = '<' + i[1].split('</')[1]
+      posnScore = tnamesHash[tempEndTag]
+      posnScore = (-1)*posnScore
+      tagEncodedHtmlSeries.append(posnScore)
 
   return tagEncodedHtmlSeries
 
