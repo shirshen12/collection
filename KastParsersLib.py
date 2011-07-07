@@ -246,7 +246,7 @@ def getTagSetPositionStructure(tt):
   posn = 0
 
   for i in tt:
-    elif not tagHash.has_key(i):
+    if not tagHash.has_key(i):
       posn = posn + 1
       tagHash[i] = posn
 
@@ -333,13 +333,22 @@ def getUniqueTagSet(rt1, rt2):
 
   for j in rt2:
     if j[2] == 'els':
-      listOfHyperlinks.append(i[1])
+      listOfTags.append(j[1])
 
   # Now convert them into a set
 
   setOfTags = list(set(listOfTags))
 
   return setOfTags
+
+# This function calculates the DFT of a real valued time-limited sequence using first
+# principles. This is an expensive operation but a correct opertion. We cant use FFT since,
+# we dont have powers of 2 sequence length everytime. We can zero pad our signals but that # will distort the spectrum since we need to perform perfect time domain interpolation
+# before the DFT opertion. We want to avoid since stretching and squeezing signals can/will
+# be an error-prone operation.
+
+def calculateDFT(d):
+  pass
 
 # This function is a config file to Hash data structure converter
 
@@ -470,69 +479,47 @@ def dftDistance(rt1, rt2):
 
   # Now get assign scores or numbers based on positional identification.
 
-  htmlseries1 = tagEncoder(tanames, rt1)
-  htmlseries2 = tagEncoder(tanames, rt2)
+  d1 = tagEncoder(tnames, rt1)
+  d2 = tagEncoder(tnames, rt2)
 
+  # Now calculate the DFT of the sequences.
 
-  # First we interpolate the signal in time domain and then zero pad for signals of
-  # unequal length.
-
-  d1_l = len(d1)
-  d2_l = len(d2)
-
-  # Now get the 'M' value, the combined value of the length of both the signals.
-
-  M = 0
-  if d1_l == d2_l:
-    M = d1_l
-  else:
-    M = (d1_l + d2_l) - 1
-
-    # Also do zero padding at the same time.
-
-    # Calculate the extent of padding to be done, for both the series.
-
-    fsl = M - d1_l
-    ssl = M - d2_l
-
-    # Now pad first series.
-
-    for i in range(0, fsl):
-      d1.append(0)
-
-    # Now pad second series.
-
-    for j in range(0, ssl):
-      d2.append(0)
+  d1_dft = calculateDFT(d1)
+  d2_dft = calculateDFT(d2)
 
   # Now calculate dft for both the series.
 
-  d1_dft = fft(array(d1))
-  d2_dft = fft(array(d2))
 
-  # Convert from numpy array object to normal python array
+#  d1_dft = rfft(array(d1))
+#  d2_dft = rfft(array(d2))
 
-  d1_dft = list(d1_dft)
-  d2_dft = list(d2_dft)
+#  # Convert from numpy array object to normal python array
 
-  # Scale the dft's by sqrt(M)
+#  d1_dft = list(d1_dft)
+#  d2_dft = list(d2_dft)
 
-  d1_dft = [float(i)/math.sqrt(M) for i in d1_dft]
-  d2_dft = [float(j)/math.sqrt(M) for j in d1_dft]
+#  # Scale the dft's by sqrt(M)
 
+#  d1_dft = [float(i)/math.sqrt(len(d1_dft)) for i in d1_dft]
+#  d2_dft = [float(j)/math.sqrt(len(d2_dft)) for j in d1_dft]
 
-  # Now calculate the energy difference between two html signals.
+#  # Now calculate the energy of each signal.
 
-  e_diff = 0
-  for k in range(0, M):
-    etemp = (abs(d1_dft[k] - d2_dft[k]))**2
-    e_diff = e_diff + etemp
+#  e1 = 0
+#  for k in range(0, len(d1_dft)):
+#    etemp = (abs(d1_dft[k]))**2
+#    e1 = e1 + etemp
 
-  htmlDistance = math.sqrt(abs(e_diff))
+#  e2 = 0
+#  for k in range(0, len(d2_dft)):
+#    etemp = (abs(d2_dft[k]))**2
+#    e2 = e2 + etemp
 
-  # Now calculate the similarity measure.
+#  htmlDistance = abs(e1 - e2)
 
-  similarityMeasure = 1/(1 + htmlDistance)
+#  # Now calculate the similarity measure.
 
-  return similarityMeasure
+#  similarityMeasure = 1/(1 + htmlDistance)
+
+#  return similarityMeasure
 
