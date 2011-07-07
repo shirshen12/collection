@@ -355,6 +355,11 @@ def calculateDFT(d):
 def calculateIDFT(d):
   pass
 
+# This fucntion does a zero padding to powers of two
+
+def zeroPad(ts, M):
+  pass
+
 # This function is a config file to Hash data structure converter
 
 def kastConfigFileParser(configFile):
@@ -487,49 +492,35 @@ def dftDistance(rt1, rt2):
   d1 = tagEncoder(tnames, rt1)
   d2 = tagEncoder(tnames, rt2)
 
-  # Now calculate the DFT of the sequences.
+  # Now pad the reconstructed sequences with zeroes
 
-  d1_dft = calculateDFT(d1)
-  d2_dft = calculateDFT(d2)
+  if len(d1) != len(d2):
 
-  # Now calculate the inverse N point IDFT of both the sequences.
+    # Now calculate the DFT of the sequences.
 
-  d1_idft = calculateIDFT(d1_dft)
-  d2_idft = calculateIDFT(d2_dft)
+    d1_dft = calculateDFT(d1)
+    d2_dft = calculateDFT(d2)
 
+    # Now calculate the inverse N point IDFT of both the sequences.
 
+    d1_idft = calculateIDFT(d1_dft)
+    d2_idft = calculateIDFT(d2_dft)
 
+    M = (len(d1) + len(d2)) - 1 # Calculate the minimum length
+    d1zp = zeroPad(d1_idft, M)
+    d1zp = zeroPad(d1_idft, M)
 
-#  d1_dft = rfft(array(d1))
-#  d2_dft = rfft(array(d2))
+    # Use FFT to calculate DFT, its fast.
 
-#  # Convert from numpy array object to normal python array
+    d1_dft = fft(array(d1zp))
+    d2_dft = fft(array(d2zp))
 
-#  d1_dft = list(d1_dft)
-#  d2_dft = list(d2_dft)
+  else:
 
-#  # Scale the dft's by sqrt(M)
+    # Now calculate the DFT of the sequences.
 
-#  d1_dft = [float(i)/math.sqrt(len(d1_dft)) for i in d1_dft]
-#  d2_dft = [float(j)/math.sqrt(len(d2_dft)) for j in d1_dft]
+    d1_dft = calculateDFT(d1)
+    d2_dft = calculateDFT(d2)
 
-#  # Now calculate the energy of each signal.
-
-#  e1 = 0
-#  for k in range(0, len(d1_dft)):
-#    etemp = (abs(d1_dft[k]))**2
-#    e1 = e1 + etemp
-
-#  e2 = 0
-#  for k in range(0, len(d2_dft)):
-#    etemp = (abs(d2_dft[k]))**2
-#    e2 = e2 + etemp
-
-#  htmlDistance = abs(e1 - e2)
-
-#  # Now calculate the similarity measure.
-
-#  similarityMeasure = 1/(1 + htmlDistance)
-
-#  return similarityMeasure
+  # Proceed with DFT distance and similarity measure calculation
 
