@@ -350,6 +350,11 @@ def getUniqueTagSet(rt1, rt2):
 def calculateDFT(d):
   pass
 
+# This function calculates the IDFT using first principles
+
+def calculateIDFT(d):
+  pass
+
 # This function is a config file to Hash data structure converter
 
 def kastConfigFileParser(configFile):
@@ -487,7 +492,12 @@ def dftDistance(rt1, rt2):
   d1_dft = calculateDFT(d1)
   d2_dft = calculateDFT(d2)
 
-  # Now calculate dft for both the series.
+  # Now calculate the inverse N point IDFT of both the sequences.
+
+  d1_idft = calculateIDFT(d1_dft)
+  d2_idft = calculateIDFT(d2_dft)
+
+
 
 
 #  d1_dft = rfft(array(d1))
