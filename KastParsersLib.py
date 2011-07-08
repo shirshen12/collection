@@ -600,7 +600,7 @@ def dftDistance(rt1, rt2):
 
     M = (len(d1) + len(d2)) - 1 # Calculate the minimum length
     d1zp = zeroPad(d1_idft, M)
-    d1zp = zeroPad(d1_idft, M)
+    d2zp = zeroPad(d2_idft, M)
 
     # Use FFT to calculate DFT, its fast.
 
