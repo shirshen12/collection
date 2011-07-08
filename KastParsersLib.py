@@ -395,12 +395,54 @@ def calculateIDFT(d):
 
   return fourier
 
+# These set of function calculates the next power of two given an integer.
+# Implementation copied from:
+# http://www.stackoverflow.com/questions/1322510/bit-twidling-find-next-power-of-two
 
+# Calculate the most significant bit.
+
+def msb(n):
+
+  result = -1
+  index = 0
+  while n:
+    bit = 1 << index
+    if bit & n:
+      result = index
+      n &= ~bit
+    index = index + 1
+
+  return result
+
+# This is the trigger function.
+
+def next_pow(n):
+
+  return 1 << (msb(n) + 1)
 
 # This fucntion does a zero padding to powers of two
 
 def zeroPad(ts, M):
-  pass
+
+  # Length of the time series.
+
+  L = len(ts)
+
+  # M > L and M - L > 0 is the mimimum amount of padding with zeroes need to be done.
+
+  zps = M - L
+
+  # Start padding the zeroes at the end.
+
+  for i in range(0, zps):
+    ts.append(0)
+
+  # Calculate the new length so that we can estimate next power of 2 from there.
+
+  nl = len(ts)
+
+
+
 
 # This function is a config file to Hash data structure converter
 
