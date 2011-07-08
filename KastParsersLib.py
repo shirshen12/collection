@@ -371,7 +371,31 @@ def calculateDFT(d):
 # This function calculates the IDFT using first principles
 
 def calculateIDFT(d):
-  pass
+
+  # The length of the signal.
+
+  N = len(d)
+  d = array(d)
+
+  # Now initialize the fourier variable which will be numpy array object.
+
+  fourier = array([])
+  fourier = empty(N, complex)
+
+  # Now calculate the DFT based on first principles.
+
+  for k in range(N):
+    fourier[k] = sum(signal*exp(-1j*-2*pi*k*arange(N)/N))
+
+  fourier = list(fourier)
+
+  # Normalize the obtained time domain series by the length of the series.
+
+  fourier = [i/float(N) for i in fourier]
+
+  return fourier
+
+
 
 # This fucntion does a zero padding to powers of two
 
