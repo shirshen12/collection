@@ -348,7 +348,25 @@ def getUniqueTagSet(rt1, rt2):
 # be an error-prone operation.
 
 def calculateDFT(d):
-  pass
+
+  # The length of the signal.
+
+  N = len(d)
+  d = array(d)
+
+  # Now initialize the fourier variable which will be numpy array object.
+
+  fourier = array([])
+  fourier = empty(N, complex)
+
+  # Now calculate the DFT based on first principles.
+
+  for k in range(N):
+    fourier[k] = sum(signal*exp(-1j*2*pi*k*arange(N)/N))
+
+  fourier = list(fourier)
+
+  return fourier
 
 # This function calculates the IDFT using first principles
 
