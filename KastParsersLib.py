@@ -362,7 +362,7 @@ def calculateDFT(d):
   # Now calculate the DFT based on first principles.
 
   for k in range(N):
-    fourier[k] = sum(signal*exp(-1j*2*pi*k*arange(N)/N))
+    fourier[k] = sum(d*exp(-1j*2*pi*k*arange(N)/N))
 
   fourier = list(fourier)
 
@@ -385,7 +385,7 @@ def calculateIDFT(d):
   # Now calculate the DFT based on first principles.
 
   for k in range(N):
-    fourier[k] = sum(signal*exp(-1j*-2*pi*k*arange(N)/N))
+    fourier[k] = sum(d*exp(-1j*-2*pi*k*arange(N)/N))
 
   fourier = list(fourier)
 
