@@ -492,7 +492,7 @@ def dftDistance(rt1, rt2):
   d1 = tagEncoder(tnames, rt1)
   d2 = tagEncoder(tnames, rt2)
 
-  # Now pad the reconstructed sequences with zeroes
+  # Now proceed with DFT and interpolated DFT calculation based on length of the sequences.
 
   if len(d1) != len(d2):
 
@@ -522,5 +522,18 @@ def dftDistance(rt1, rt2):
     d1_dft = calculateDFT(d1)
     d2_dft = calculateDFT(d2)
 
-  # Proceed with DFT distance and similarity measure calculation
+  # DFT distance calculation based on Parsevals Theorem
+
+  dftsum = 0.0
+  for l in range(0, len(d1_dft)):
+    s = (abs(d1_dft[l]) - abs(d2_dft[l]))**2
+    dftsum = dftsum + s
+
+  distance = math.sqrt(dftsum)
+
+  # Similarity measure calculation
+
+  similarityMeasure = 1/(1 + distance)
+
+  return similarityMeasure
 
