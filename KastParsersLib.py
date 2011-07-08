@@ -441,8 +441,16 @@ def zeroPad(ts, M):
 
   nl = len(ts)
 
+  np2 = next_pow(nl)
 
+  zps = np2 - nl
 
+  # Start padding the zeroes at the end.
+
+  for i in range(0, zps):
+    ts.append(0)
+
+  return ts
 
 # This function is a config file to Hash data structure converter
 
