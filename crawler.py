@@ -4,7 +4,7 @@
 # By generic, we mean that by specifying:
 #
 # 1. The FULLY QUALIFIED DOMAIN NAME, henceforth FQDN, like "http://www.bestbuy.com/"
-# 2. A list of URLs (probably 10) which will act a training data set for our crawler
+# 2. A list of URLs (probably 10 or more) which will act a training data set for our crawler
 #    to perform structural evaluation of pages, so that it can dynamically focus and
 #    download only those pages that are of interest to the user.
 # 3. A list of CSS rules, to extract only those parts of the page which are of interest
@@ -43,7 +43,7 @@ import pdb # Debug Module
 import KastParsersLib # Custom parsing module with specific parsing functions.
 import KastTimeLib # Handy module with date and time processing functions.
 
-BASE_DIR = '/kast/' # Base directory where all results of subtasks reside for a particular collection task.
+BASE_DIR = '/kast/' # Base directory where all results of subtasks reside for a particular collection task for a website.
 CRAWL_COPIES_LIMIT = 10 # Maximum copies of crawler for a single target that can be enabled
 CRAWL_COPIES_DEFAULT = 1 # Minimum number of crawler copies, if user specified value id missing.
 unseenUrlList = [] # Global list of absolute URLs of a particular website that has to be crawled yet.
@@ -67,9 +67,10 @@ def main(targetWebsite, configFile):
     print 'Target website configs could not extracted. Crawl engine is exiting.'
     sys.exit(-1)
 
-  # Obtain the list of URLs from the above data structure and generate DFTs for all of them.
+  # Obtain the list of URLs from the above data structure and generate time domain
+  # perfect series representation of html content.
 
-  dftRepresentations = [KastParsersLib.html2dft(url) for url in targetWebsiteConfigs['SampleURLS']]
+  htmlSeries = [KastParsersLib.html2TagSignal(url) for url in targetWebsiteConfigs['SampleURLS']]
 
   # Populate the unseenUrlList
 
@@ -80,18 +81,18 @@ def main(targetWebsite, configFile):
 
   # Start crawling routine, which is multi process routine. So we will first fork 'x' copies of the crawl.
 
-  crawlerCopies = CRAWL_COPIES_DEFAULT
-  if targetWebsiteConfigs.has_key('CrawlerCopies'):
-    crawlerCopies = int(targetWebsiteConfigs['CrawlerCopies'])
-  child_pids = [os.fork() for i in range(0, crawlerCopies) if crawlerCopies <= CRAWL_COPIES_LIMIT]
-  child_pids = [i for i in child_pids if i == 0]
+#  crawlerCopies = CRAWL_COPIES_DEFAULT
+#  if targetWebsiteConfigs.has_key('CrawlerCopies'):
+#    crawlerCopies = int(targetWebsiteConfigs['CrawlerCopies'])
+#  child_pids = [os.fork() for i in range(0, crawlerCopies) if crawlerCopies <= CRAWL_COPIES_LIMIT]
+#  child_pids = [i for i in child_pids if i == 0]
 
-  # Start a crawl process for all succesfull forks. In this
+#  # Start a crawl process for all succesfull forks. In this
 
-  for copy in range(0, len(child_pids)):
+#  for copy in range(0, len(child_pids)):
 
-    taskSuccessFlag = crawl(dftRepresentations, BASE_DIR)
-    crawlSuccessFlag.append(taskSuccessFlag)
+#    taskSuccessFlag = crawl(dftRepresentations, BASE_DIR)
+#    crawlSuccessFlag.append(taskSuccessFlag)
 
   # Apply the CSS rules for scrapping content, this will serve as a simple rule engine template.
 
