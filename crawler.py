@@ -21,13 +21,13 @@
 #    the pages and stores them in a compressed format, with timestamp and URL of
 #    the page as its filename.
 # 3. Finally, apply the CSS rules, and extract content and log all that info in a
-#    a log file (http://www.bestbuy.com/crawlresults/<date>/<begin_processing_timestamp>)
+#    a log file
 #
 # At every step of the job completion, notifications will be sent the system admin group.
 
 # Programmer: Shirshendu Chakrabarti
 # Created at: 2011-June-13
-# Modified  : 2011-June-20
+# Modified  : 2011-July-08
 
 # Import System module dependencies here.
 
@@ -41,30 +41,73 @@ import pdb # Debug Module
 # Import Internal modules dependencies written by in-house software developers here.
 
 import KastParsersLib # Custom parsing module with specific parsing functions.
-import KastTimeLib # Handy module with date and time processing functions.
+import KastGenericFunctionsLib # Custom module for handy generic functions.
 
-BASE_DIR = '/kast/' # Base directory where all results of subtasks reside for a particular collection task for a website.
-CRAWL_COPIES_LIMIT = 10 # Maximum copies of crawler for a single target that can be enabled
-CRAWL_COPIES_DEFAULT = 1 # Minimum number of crawler copies, if user specified value id missing.
-unseenUrlList = [] # Global list of absolute URLs of a particular website that has to be crawled yet.
-vistedUrlList = [] # Global list of absolute URLs of a particular website that has been crawled.
-crawlSuccessFlag = [] # Identifies if a particular crawler copy failed or succeded.
+# Global constants
+
+BASELOGDIR = '/kast/log/'
+BASELOCKFILEDIR = '/kast/lock/'
+BASEFILESTORAGEDIR = '/kast/'
+BASEERRORLOGDIR = '/kast/errorlog/'
+
+# List of absolute filenames that need to be globally accessible.
+
+lockFile = ''
+errorLog = ''
+sitename = ''
+
+# Global list of absolute URLs of a particular website that has to be crawled yet.
+
+unseenUrlList = []
+
+# Global list of absolute URLs of a particular website that has been crawled.
+
+vistedUrlList = []
 
 # This function kickstarts our crawler program.
 
 def main(targetWebsite, configFile):
 
-  # List all global variables so that they can be modified and be thread safe
-
   global unseenUrlList
-  global crawlSuccessFlag
+  global BASELOGDIR
+  global BASELOCKFILEDIR
+  global BASEFILESTORAGEDIR
+  global BASEERRORLOGDIR
 
-  # First read the config file into a Dictionary/Hash structure.
+  # Extract website name
+
+  sitename = extractWebSiteName(targetWebsite)
+
+  # First generate the folder structure if its does not exist.
+
+  BASELOGDIR = chkmkFolderStructure(BASELOGDIR)
+  BASELOCKFILEDIR = chkmkFolderStructure(BASELOCKFILEDIR)
+  BASEFILESTORAGEDIR = chkmkFolderStructure(BASEFILESTORAGEDIR + sitename + '/')
+  BASEERRORLOGDIR = chkmkFolderStructure(BASEERRORLOGDIR)
+
+  # Now generate the task/target specific filenames.
+
+  lockFile = BASELOCKFILEDIR + sitename + '.lock'
+  errorLog = BASEERRORLOGDIR + sitename + '.error'
+
+  # Now check if the lock file exists and proceed with crawling.
+
+  if os.path.exists(lockFile):
+    logException(sitename + ' crawl in progress - Exiting - ' + str(time.time()), BASELOGDIR + sitename + 'exit.log')
+    sys.exit(-1)
+
+  # Make a lock file.
+
+  lf = f(lockFile, 'w')
+  lf.close()
+
+  # Read the config file into a Dictionary/Hash structure.
 
   targetWebsiteConfigs = KastParsersLib.kastConfigFileParser(configFile)
+
   if targetWebsiteConfigs == {}:
 
-    print 'Target website configs could not extracted. Crawl engine is exiting.'
+    logException('Target website configs could not extracted - ' + str(time.time()), errorLog)
     sys.exit(-1)
 
   # Obtain the list of URLs from the above data structure and generate time domain
@@ -76,23 +119,12 @@ def main(targetWebsite, configFile):
 
   unseenUrlList = populateUnseenUrlList(targetWebsite, unseenUrlList)
   if unseenUrlList == []:
-    print 'Seed URL List is malformed. Crawl engine is exiting.'
+    logException('Seed URL List is malformed. Crawl engine is exiting - ' + str(time.time()), errorLog)
     sys.exit(-1)
 
-  # Start crawling routine, which is multi process routine. So we will first fork 'x' copies of the crawl.
+  # Now start crawling
 
-#  crawlerCopies = CRAWL_COPIES_DEFAULT
-#  if targetWebsiteConfigs.has_key('CrawlerCopies'):
-#    crawlerCopies = int(targetWebsiteConfigs['CrawlerCopies'])
-#  child_pids = [os.fork() for i in range(0, crawlerCopies) if crawlerCopies <= CRAWL_COPIES_LIMIT]
-#  child_pids = [i for i in child_pids if i == 0]
-
-#  # Start a crawl process for all succesfull forks. In this
-
-#  for copy in range(0, len(child_pids)):
-
-#    taskSuccessFlag = crawl(dftRepresentations, BASE_DIR)
-#    crawlSuccessFlag.append(taskSuccessFlag)
+  downloadedPagesFolder = crawl(htmlSeries)
 
   # Apply the CSS rules for scrapping content, this will serve as a simple rule engine template.
 
@@ -100,15 +132,14 @@ def main(targetWebsite, configFile):
 
   # Now log all the information to AllegroGraphDB
 
-
 if __name__ == '__main__':
 
   # Check arguments being passed. We need 3 arguments:
   #
   # 1. Fully qualified name of the website to be crawled.
   # 2. A .json format file which has the sample list URLs
-  #    which act the training dataset for the crawler.
-  # 3. CSS rules, which will extract content from the downloaded
+  #    which act the training dataset for the crawler and
+  #    CSS rules, which will extract content from the fetched
   #    pages of interest.
 
   if len(sys.argv) == 3:
