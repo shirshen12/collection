@@ -152,9 +152,46 @@ def classify(htmlSeries):
 
   uselessPagesFolder = chkmkFolderStructure(BASEFILESTORAGEDIR + '/useless/')
 
+  # List all the files, in the folder.
 
+  listOfFiles = os.listdir(BASEFILESTORAGEDIR)
+  listOfFiles = [BASEFILESTORAGEDIR + p for p in listOfFiles]
 
+  # Now start the loop and process every file
 
+  for l in range(0, len(listOfFiles)):
+
+    # Choose a file randomly.
+
+    page = random.choice(listOfFiles)
+
+    # Extract the content of the file
+
+    c = gzip.open(page, 'rb')
+    contents = c.read()
+    c.close()
+
+    # Write to a tmp file.
+
+    tmpFilename = '/tmp/' + page.split('/')[-1]
+    f = file(tmpFilename, 'w')
+    f.write(contents)
+    f.close()
+
+    # Generate html series of this file, tphs --> testPageHtmlSeries
+
+    tphsUrl = 'file://' + tmpFilename
+    tphs = KastParsersLib.html2TagSignal(tphsUrl)
+
+    # dftDistance scoreboard
+
+    dftDistanceScoreboard = []
+
+    for d in htmlSeries:
+
+      # Hold on over here - Shirshendu
+
+      dftDistanceScoreboard.append(KastParsersLib.dftDistance(tphs, d))
 
 
 # This function kickstarts our crawler program.

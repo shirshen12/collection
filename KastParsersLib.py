@@ -452,6 +452,11 @@ def zeroPad(ts, M):
 
   return ts
 
+# Calculate threshold score for classification
+
+def calculateThresholdDftDistanceScore(samplePages):
+  pass
+
 # This function is a config file to Hash data structure converter
 
 def kastConfigFileParser(configFile):
