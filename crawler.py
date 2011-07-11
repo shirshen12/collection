@@ -4,8 +4,8 @@
 # By generic, we mean that by specifying:
 #
 # 1. The FULLY QUALIFIED DOMAIN NAME, henceforth FQDN, like "http://www.bestbuy.com/"
-# 2. A list of URLs (probably 10 or more) which will act a training data set for our crawler
-#    to perform structural evaluation of pages, so that it can dynamically focus and
+# 2. A list of URLs (probably 10 or more) which will act a training data set for our
+#    crawler to perform structural evaluation of pages, so that it can dynamically and
 #    download only those pages that are of interest to the user.
 # 3. A list of CSS rules, to extract only those parts of the page which are of interest
 #    to the user, as expressed by the CSS rules.
@@ -38,7 +38,16 @@ import random # Provides random number generation
 import urllib2 # HTTP client library
 import pdb # Debug Module
 
-# Import Internal modules dependencies written by in-house software developers here.
+# CSS Rule engine on the lines of jQuery Javascript library.
+
+import pyquery
+from pyquery import PyQuery as pq
+
+# gzip module
+
+import gzip
+
+# Import Internal modules dependencies here.
 
 import KastParsersLib # Custom parsing module with specific parsing functions.
 import KastGenericFunctionsLib # Custom module for handy generic functions.
@@ -63,6 +72,73 @@ unseenUrlList = []
 # Global list of absolute URLs of a particular website that has been crawled.
 
 vistedUrlList = []
+
+# This function downloads the pages in a BFS manner.
+
+def crawl(targetWebsite):
+
+  global sitename
+  global errorLog
+  global unseenUrlList
+  global vistedUrlList
+  global BASEFILESTORAGEDIR
+
+  # Now start the crawling rountine.
+
+  while (1):
+
+    if unseenUrlList != []:
+
+      # Choose a page randomly
+
+      page = random.choice(unseenUrlList)
+
+      # Fetch the content.
+
+      r = KastParsersLib.fetchURL(page)
+
+      # Clean the content.
+
+      r = KastParsersLib.cleanHtml(r)
+
+      # Write the content to a temp file.
+
+      filename = sitename + '-' + round(time.time(), 2)
+      f = gzip.open(BASEFILESTORAGEDIR + filename + '.gz', 'wb')
+      f.write(r)
+      f.close()
+
+      # Convert to DOM and apply the CSS rule engine
+
+      d = pq(r)
+      ele_a = d('a')
+
+      # Extract the hyperlinks
+
+      links_a = KastParsersLib.extractHyperlinks(ele_a)
+
+      # Convert to absolute links.
+
+      unseenUrlListTmp = KastParsersLib.convert2AbsoluteHyperlinks(links_a, targetWebsite)
+
+      # Now check how many of these links exist in Visited URL list.
+
+      for link in unseenUrlListTmp:
+        if not vistedUrlList.__contains__(link):
+          unseenUrlList.append(link)
+
+      # Now append this page processed to visited URLs list.
+
+      visitedUrlList.append(page)
+
+      # Now remoce the same link from unseenUrlList.
+
+      unseenUrlList.remove(link)
+
+      # Condition to end the crawl.
+
+      if unseenUrlList == []:
+        return BASEFILESTORAGEDIR
 
 # This function kickstarts our crawler program.
 
@@ -122,9 +198,11 @@ def main(targetWebsite, configFile):
     logException('Seed URL List is malformed. Crawl engine is exiting - ' + str(time.time()), errorLog)
     sys.exit(-1)
 
-  # Now start crawling
+  # Start crawling
 
-  downloadedPagesFolder = crawl(htmlSeries)
+  downloadedPagesFolder = crawl(targetWebsite)
+
+  # Now apply the Page classification algorithm to preserve only the pages of interest.
 
   # Apply the CSS rules for scrapping content, this will serve as a simple rule engine template.
 
