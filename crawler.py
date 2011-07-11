@@ -101,7 +101,7 @@ def crawl(targetWebsite):
 
       r = KastParsersLib.cleanHtml(r)
 
-      # Write the content to a temp file.
+      # Write the content to a file, in the designated folder.
 
       filename = sitename + '-' + round(time.time(), 2)
       f = gzip.open(BASEFILESTORAGEDIR + filename + '.gz', 'wb')
@@ -131,14 +131,31 @@ def crawl(targetWebsite):
 
       visitedUrlList.append(page)
 
-      # Now remoce the same link from unseenUrlList.
+      # Now remove the same link from unseenUrlList.
 
       unseenUrlList.remove(link)
 
       # Condition to end the crawl.
 
       if unseenUrlList == []:
-        return BASEFILESTORAGEDIR
+        return
+
+# This function is our classifier, it applies the DFT distance algorithm and
+# preserves those html pages which are of interest. It moves the files which
+# are not of interest to a folder.
+
+def classify(htmlSeries):
+
+  global BASEFILESTORAGEDIR
+
+  # Make the useless folder page.
+
+  uselessPagesFolder = chkmkFolderStructure(BASEFILESTORAGEDIR + '/useless/')
+
+
+
+
+
 
 # This function kickstarts our crawler program.
 
@@ -200,9 +217,11 @@ def main(targetWebsite, configFile):
 
   # Start crawling
 
-  downloadedPagesFolder = crawl(targetWebsite)
+  crawl(targetWebsite)
 
   # Now apply the Page classification algorithm to preserve only the pages of interest.
+
+  classify(htmlSeries)
 
   # Apply the CSS rules for scrapping content, this will serve as a simple rule engine template.
 
