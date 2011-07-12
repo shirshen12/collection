@@ -45,6 +45,10 @@ from numpy.fft import *
 
 import pdb
 
+# External module dependencies.
+
+import KastGenericFunctionsLib
+
 # Global User Agent String
 
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.20 Safari/535.1'
@@ -489,9 +493,7 @@ def calculateThresholdDftDistanceScore(samplePages):
 
   # Now calculate the mean measure of all the scores.
 
-  sumDftScores = sum(dftScores)
-  avgDftScore = sumDftScores/float(len(dftScores))
-  return avgDftScore
+  return KastGenericFunctionsLib.calcAvg(dftScores)
 
 # This function is a config file to Hash data structure converter
 

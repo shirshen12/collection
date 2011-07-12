@@ -42,3 +42,12 @@ def extractWebSiteName(targetWebsite):
 
   return websiteName
 
+# This function calculates the average of a mumnerical array.
+
+def calcAvg(aList):
+
+  sumOfListMembers = sum(aList)
+  lengthOfList = len(aList)
+
+  return float(sumOfListMembers)/float(lengthOfList)
+
