@@ -193,6 +193,15 @@ def classify(htmlSeries, sm):
 
       dftDistanceScoreboard.append(KastParsersLib.dftDistance(tphs, d))
 
+    # Now calculate average.
+
+    s = KastGenericFunctionsLib.calcAvg(dftDistanceScoreboard)
+
+    # Score is less than mean similarity measure, move it to the useless folder.
+
+    if s < sm:
+      os.system(page, uselessPagesFolder)
+
 
 # This function kickstarts our crawler program.
 
