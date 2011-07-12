@@ -144,7 +144,7 @@ def crawl(targetWebsite):
 # preserves those html pages which are of interest. It moves the files which
 # are not of interest to a folder.
 
-def classify(htmlSeries):
+def classify(htmlSeries, sm):
 
   global BASEFILESTORAGEDIR
 
@@ -189,7 +189,7 @@ def classify(htmlSeries):
 
     for d in htmlSeries:
 
-      # Hold on over here - Shirshendu
+      # Now calculate the score and append them to an array.
 
       dftDistanceScoreboard.append(KastParsersLib.dftDistance(tphs, d))
 
@@ -245,6 +245,10 @@ def main(targetWebsite, configFile):
 
   htmlSeries = [KastParsersLib.html2TagSignal(url) for url in targetWebsiteConfigs['SampleURLS']]
 
+  # Calculate the average similarity measure.
+
+  similarityMeasure = KastParsersLib.calculateThresholdDftDistanceScore(htmlSeries)
+
   # Populate the unseenUrlList
 
   unseenUrlList = populateUnseenUrlList(targetWebsite, unseenUrlList)
@@ -254,7 +258,7 @@ def main(targetWebsite, configFile):
 
   # Start crawling
 
-  crawl(targetWebsite)
+  crawl(targetWebsite, similarityMeasure)
 
   # Now apply the Page classification algorithm to preserve only the pages of interest.
 
