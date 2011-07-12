@@ -58,12 +58,14 @@ BASELOGDIR = '/kast/log/'
 BASELOCKFILEDIR = '/kast/lock/'
 BASEFILESTORAGEDIR = '/kast/'
 BASEERRORLOGDIR = '/kast/errorlog/'
+BASECONTENTDIR = '/kast/content/'
 
 # List of absolute filenames that need to be globally accessible.
 
 lockFile = ''
 errorLog = ''
 sitename = ''
+contentLogFile = ''
 
 # Global list of absolute URLs of a particular website that has to be crawled yet.
 
@@ -202,6 +204,13 @@ def classify(htmlSeries, sm):
     if s < sm:
       os.system(page, uselessPagesFolder)
 
+# This is the function which will extract the content from the pages of interest
+# and will log it into a file.
+
+def extractContent(rules):
+
+  global contentLogFile
+
 
 # This function kickstarts our crawler program.
 
@@ -212,6 +221,8 @@ def main(targetWebsite, configFile):
   global BASELOCKFILEDIR
   global BASEFILESTORAGEDIR
   global BASEERRORLOGDIR
+  global BASECONTENTDIR
+  global contentLogFile
 
   # Extract website name
 
@@ -223,11 +234,13 @@ def main(targetWebsite, configFile):
   BASELOCKFILEDIR = chkmkFolderStructure(BASELOCKFILEDIR)
   BASEFILESTORAGEDIR = chkmkFolderStructure(BASEFILESTORAGEDIR + sitename + '/')
   BASEERRORLOGDIR = chkmkFolderStructure(BASEERRORLOGDIR)
+  BASECONTENTDIR = chkmkFolderStructure(BASECONTENTDIR)
 
   # Now generate the task/target specific filenames.
 
   lockFile = BASELOCKFILEDIR + sitename + '.lock'
   errorLog = BASEERRORLOGDIR + sitename + '.error'
+  contentLogFile = BASECONTENTDIR + sitename + str(round(time.time(), 2))
 
   # Now check if the lock file exists and proceed with crawling.
 
@@ -274,6 +287,10 @@ def main(targetWebsite, configFile):
   classify(htmlSeries)
 
   # Apply the CSS rules for scrapping content, this will serve as a simple rule engine template.
+
+  contentExtractionRules = [rule for rule in targetWebsiteConfigs['ContentExtractionRules']][0]
+
+  extractContent(contentExtractionRules)
 
   # Convert the log file into RDF N Triples file
 
