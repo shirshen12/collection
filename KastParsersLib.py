@@ -455,10 +455,43 @@ def zeroPad(ts, M):
 # Calculate threshold score for classification
 
 def calculateThresholdDftDistanceScore(samplePages):
-  pass
 
+  # Arrange the series in an adjacency graph format to keep track of computation.
 
+  computationGraph = {}
 
+  # Compute a series index {'rt1':[], 'rt2', []}
+
+  seriesIndex = {}
+
+  for i in range(len(samplePages)):
+    seriesIndex[rt + str(i)] = samplePages[i]
+
+  # Now construct the computation graph.
+
+  for j in len(0, seriesIndex):
+    computationGraph[rt + str(i)] = []
+    branchingFactor = len(seriesIndex) - j
+    for k in range(0, branchingFactor)
+      if (j + 1) < len(samplePages):
+        computationGraph[rt + str(i)].append('rt' + str(j + 1))
+
+  # Now for every node in the computation graph
+
+  dftScores = []
+
+  for l in computationGraph:
+    combinatorialComputationArray = computationGraph[l]
+    firstSeries = seriesIndex[l]
+    for m in combinatorialComputationArray:
+      secondSeries = seriesIndex[m]
+      dftScores.append(dftDistance(firstSeries, secondSeries))
+
+  # Now calculate the mean measure of all the scores.
+
+  sumDftScores = sum(dftScores)
+  avgDftScore = sumDftScores/float(len(dftScores))
+  return avgDftScore
 
 # This function is a config file to Hash data structure converter
 

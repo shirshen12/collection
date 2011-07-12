@@ -133,7 +133,7 @@ def crawl(targetWebsite):
 
       # Now remove the same link from unseenUrlList.
 
-      unseenUrlList.remove(link)
+      unseenUrlList.remove(page)
 
       # Condition to end the crawl.
 
