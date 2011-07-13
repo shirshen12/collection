@@ -254,6 +254,11 @@ def extractContent(rules):
 
   KastGenericFunctionsLib.writeToDisk(contentLogFile, records)
 
+# This function converts a log file full of data into N-Triples format.
+
+def table2RDFNTriplesConverter(logFile, predList):
+  pass
+
 # This function kickstarts our crawler program.
 
 def main(targetWebsite, configFile):
@@ -330,11 +335,15 @@ def main(targetWebsite, configFile):
 
   # Apply the CSS rules for scrapping content, this will serve as a simple rule engine template.
 
-  contentExtractionRules = [rule for rule in targetWebsiteConfigs['ContentExtractionRules']][0]
+  contentExtractionRules = targetWebsiteConfigs['ContentExtractionRules']
 
   extractContent(contentExtractionRules)
 
   # Convert the log file into RDF N Triples file
+
+  predicateList = targetWebsiteConfigs['PredicateList']
+
+  nTriplesFile = table2RDFNTriplesConverter(contentLogFile, predicateList)
 
   # Now log all the information to AllegroGraphDB
 
