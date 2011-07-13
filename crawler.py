@@ -211,6 +211,48 @@ def extractContent(rules):
 
   global contentLogFile
 
+  # Now obtain a list of all the files from the content folder.
+
+  listOfFiles = os.listdir(BASEFILESTORAGEDIR)
+  listOfFiles = [BASEFILESTORAGEDIR + l for l in listOfFiles]
+
+  records = []
+
+  # Now loop through the files and apply the rules
+
+  for f in listOfFiles:
+
+    # Read the gzipped file
+
+    g = gzip.open(f, 'rb')
+    c = g.read()
+    g.close()
+
+    record = []
+
+    # Now apply the rules serially and extract content.
+
+    for r in rules:
+
+      # Get a jQuery type $ object for this html page.
+
+      d = pq(c)
+
+      # Apply the CSS selector
+
+      ele = d(r)
+
+      # Store the obtained text in an array.
+
+      record.append(ele.text)
+
+    # Now append the record to records.
+
+    records.append(record)
+
+  # Now write all the records to a designated content log file.
+
+  KastGenericFunctionsLib.writeToDisk(contentLogFile, records)
 
 # This function kickstarts our crawler program.
 

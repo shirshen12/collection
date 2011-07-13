@@ -51,3 +51,20 @@ def calcAvg(aList):
 
   return float(sumOfListMembers)/float(lengthOfList)
 
+# This function writes an array of records to the disk.
+
+def writeToDisk(logFile, records):
+
+  for record in records:
+
+    f = file(logFile, 'a')
+
+    record = str(record)
+
+    record = record.split(']')[0]
+    record = record.split('[')[1]
+
+    f.write(record + '\n')
+
+    f.close()
+
