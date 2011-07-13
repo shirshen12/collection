@@ -47,6 +47,18 @@ from pyquery import PyQuery as pq
 
 import gzip
 
+# Import Semantic and Graph Database Python dependencies.
+
+import rdflib
+from rdflib import ConjunctiveGraph
+from rdflib import BNode
+from rdflib import Namespace
+from rdflib import URIRef
+from rdflib import Literal
+
+# Some AllegroGraphDB Python dependencies get imported here later on.
+
+
 # Import Internal modules dependencies here.
 
 import KastParsersLib # Custom parsing module with specific parsing functions.
