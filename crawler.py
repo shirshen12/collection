@@ -243,6 +243,10 @@ def extractContent(rules):
 
     record = []
 
+    # Append the name of the file, because it serves as value for product location
+
+    record.append(f.split('/')[-1])
+
     # Now apply the rules serially and extract content.
 
     for r in rules:
