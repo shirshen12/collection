@@ -118,7 +118,7 @@ def crawl(targetWebsite):
 
       # Write the content to a file, in the designated folder.
 
-      filename = sitename + '-' + round(time.time(), 2)
+      filename = KastGenericFunctionsLib.extractWebSiteName(page) + '-' + str(round(time.time(), 2))
       f = gzip.open(BASEFILESTORAGEDIR + filename + '.gz', 'wb')
       f.write(r)
       f.close()
