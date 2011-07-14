@@ -59,6 +59,7 @@ from rdflib import Literal
 # Some AllegroGraphDB Python dependencies get imported here later on.
 
 
+
 # Import Internal modules dependencies here.
 
 import KastParsersLib # Custom parsing module with specific parsing functions.
@@ -269,6 +270,11 @@ def extractContent(rules):
 # This function converts a log file full of data into N-Triples format.
 
 def table2RDFNTriplesConverter(logFile, predList):
+
+  # Define a namespace, this is constant for all data in our KB/DB
+
+  KAST = Namespace('http://www.kast.com/product-details/')
+
   pass
 
 # This function kickstarts our crawler program.
