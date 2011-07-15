@@ -275,11 +275,55 @@ def extractContent(rules):
 
 def table2RDFNTriplesConverter(logFile, predList):
 
+  global sitename
+
   # Define a namespace, this is constant for all data in our KB/DB
 
-  KAST = Namespace('http://www.kast.com/product-details/')
+  KAST = Namespace('http://www.kast.com/data/')
 
-  pass
+  # Define a ConjunctiveGraph, a normal graph also is sufficient but this
+  # kind of graph helps us in trivially merging various kinds of sub components.
+
+  g = ConjunctiveGraph()
+
+  # Now read the log file
+
+  f = file(logFile, 'r')
+  records = f.readlines()
+  f.close()
+
+  # Now loop through all the records and also through predicate list
+
+  for record in records:
+
+    # Define a guid which is the only unique primary key in our entire database.
+
+    guid = 'http://www.kast.com/data/id/'
+
+    # Now split to obtain the url from the record and hash it to obtain a global unique ID
+
+    guid = guid + KAST[record.split(',')[0]].md5_term_hash()
+
+    for p in range(1, len(predList)):
+
+      # Generate the predicate
+
+      pred = KAST[predList[p]]
+      dataItem = record.split(',')[p]
+      obj = KAST[dataItem]
+
+      # Now add the triples in the defined Conjunctive Graph.
+
+      g.add((guid, pred, obj))
+      g.add((obj, KAST['hasvalue']), rdflib.Literal(dataItem))
+
+  # Now after adding all the triples, serialize it to N-Triples format.
+
+  o = file(BASECONTENTDIR + sitename + '.nt', 'w')
+  o.write(g.serialize(format="nt"))
+  o.close()
+
+  return BASECONTENTDIR + sitename + '.nt'
 
 # This function kickstarts our crawler program.
 
@@ -368,6 +412,8 @@ def main(targetWebsite, configFile):
   nTriplesFile = table2RDFNTriplesConverter(contentLogFile, predicateList)
 
   # Now log all the information to AllegroGraphDB
+
+
 
 if __name__ == '__main__':
 
