@@ -75,6 +75,8 @@ from franz.openrdf.rio.rdfformat import RDFFormat
 from franz.openrdf.rio.rdfwriter import  NTriplesWriter
 from franz.openrdf.rio.rdfxmlwriter import RDFXMLWriter
 
+AG_PORT = "8080"
+
 # Import Internal modules dependencies here.
 
 import KastParsersLib # Custom parsing module with specific parsing functions.
@@ -102,6 +104,26 @@ unseenUrlList = []
 # Global list of absolute URLs of a particular website that has been crawled.
 
 vistedUrlList = []
+
+# This function gets returns a connection object with a triple store created
+# or renewed.
+
+def getServerConnection(accessMode):
+
+  # For remote linux server, using port forwarding from localhost.
+  #server = AllegroGraphServer("localhost", port=AG_PORT, user="test", password="xyzzy")
+
+  # For localhost.
+  server = AllegroGraphServer("localhost", port=AG_PORT)
+
+  catalog = server.openCatalog('scratch')
+  #print "Available repositories in catalog '%s':  %s" % (catalog.getName(), catalog.listRepositories())
+
+  myRepository = catalog.getRepository("agraph_test", accessMode)
+  myRepository.initialize()
+  connection = myRepository.getConnection()
+  #print "Repository %s is up!  It contains %i statements." % (myRepository.getDatabaseName(), connection.size())
+  return connection
 
 # This function downloads the pages in a BFS manner.
 
@@ -344,7 +366,10 @@ def table2RDFNTriplesConverter(logFile, predList):
 # remote server.
 
 def store2db(datafile):
-  pass
+
+  # First get a connection object to our server.
+
+  connection = getServerConnection(accessMode=Repository.RENEW)
 
 # This function kickstarts our crawler program.
 
