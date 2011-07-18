@@ -325,6 +325,12 @@ def table2RDFNTriplesConverter(logFile, predList):
 
   return BASECONTENTDIR + sitename + '.nt'
 
+# This function stores the data file into the AllegroGraphDB instance running on some
+# remote server.
+
+def store2db(datafile):
+  pass
+
 # This function kickstarts our crawler program.
 
 def main(targetWebsite, configFile):
@@ -413,7 +419,9 @@ def main(targetWebsite, configFile):
 
   # Now log all the information to AllegroGraphDB
 
+  store2db
 
+# Make this as an executable script.
 
 if __name__ == '__main__':
 
