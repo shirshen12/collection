@@ -27,7 +27,7 @@
 
 # Programmer: Shirshendu Chakrabarti
 # Created at: 2011-June-13
-# Modified  : 2011-July-08
+# Modified  : 2011-July-18
 
 # Import System module dependencies here.
 
@@ -56,9 +56,24 @@ from rdflib import Namespace
 from rdflib import URIRef
 from rdflib import Literal
 
-# Some AllegroGraphDB Python dependencies get imported here later on.
+# Some AllegroGraphDB Python dependencies. All import modules copied from
+# tutorial_examples.py in AllegroGraphDB server installation.
 
+pythonClientPath = '/usr/lib/agraph-fse-3.3/python/franz'
+sys.path.append(pythonClientPath)
 
+from franz.openrdf.sail.allegrographserver import AllegroGraphServer
+from franz.openrdf.repository.repository import Repository
+from franz.miniclient import repository
+from franz.openrdf.query.query import QueryLanguage
+from franz.openrdf.vocabulary.rdf import RDF
+from franz.openrdf.vocabulary.rdfs import RDFS
+from franz.openrdf.vocabulary.owl import OWL
+from franz.openrdf.vocabulary.xmlschema import XMLSchema
+from franz.openrdf.query.dataset import Dataset
+from franz.openrdf.rio.rdfformat import RDFFormat
+from franz.openrdf.rio.rdfwriter import  NTriplesWriter
+from franz.openrdf.rio.rdfxmlwriter import RDFXMLWriter
 
 # Import Internal modules dependencies here.
 
