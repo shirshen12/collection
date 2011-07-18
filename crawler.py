@@ -76,6 +76,7 @@ from franz.openrdf.rio.rdfwriter import  NTriplesWriter
 from franz.openrdf.rio.rdfxmlwriter import RDFXMLWriter
 
 AG_PORT = "8080"
+BASE_URI = 'http://www.kast.com/data'
 
 # Import Internal modules dependencies here.
 
@@ -369,7 +370,19 @@ def store2db(datafile):
 
   # First get a connection object to our server.
 
-  connection = getServerConnection(accessMode=Repository.RENEW)
+  connection = getServerConnection(Repository.RENEW)
+
+  # Now load the data.
+
+  connection.clear()
+
+  # Now load the triples.
+
+  connection.add(datafile, base=BASE_URI, format=RDFFormat.NTRIPLES, contexts=None)
+
+  # Now index all the triples added.
+
+  connection.indexTriples(all=True)
 
 # This function kickstarts our crawler program.
 
