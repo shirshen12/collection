@@ -476,7 +476,7 @@ def calculateThresholdDftDistanceScore(samplePages):
   for j in len(0, seriesIndex):
     computationGraph[rt + str(i)] = []
     branchingFactor = len(seriesIndex) - j
-    for k in range(0, branchingFactor)
+    for k in range(0, branchingFactor):
       if (j + 1) < len(samplePages):
         computationGraph[rt + str(i)].append('rt' + str(j + 1))
 

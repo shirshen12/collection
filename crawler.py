@@ -59,7 +59,7 @@ from rdflib import Literal
 # Some AllegroGraphDB Python dependencies. All import modules copied from
 # tutorial_examples.py in AllegroGraphDB server installation.
 
-pythonClientPath = '/usr/lib/agraph-fse-3.3/python/franz'
+pythonClientPath = '/home/shirshendu/Personal/collection/franz'
 sys.path.append(pythonClientPath)
 
 from franz.openrdf.sail.allegrographserver import AllegroGraphServer
