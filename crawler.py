@@ -416,7 +416,7 @@ def main(targetWebsite, configFile):
 
   lockFile = BASELOCKFILEDIR + sitename + '.lock'
   errorLog = BASEERRORLOGDIR + sitename + '.error'
-  contentLogFile = BASECONTENTDIR + sitename + str(round(time.time(), 2))
+  contentLogFile = BASECONTENTDIR + sitename + '-' + str(round(time.time(), 2))
 
   # Now check if the lock file exists and proceed with crawling.
 
