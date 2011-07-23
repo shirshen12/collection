@@ -388,6 +388,10 @@ def store2db(datafile):
 
 def main(targetWebsite, configFile):
 
+  # Set debub true, turn off in production
+
+  # pdb.set_trace()
+
   global unseenUrlList
   global BASELOGDIR
   global BASELOCKFILEDIR
@@ -398,15 +402,15 @@ def main(targetWebsite, configFile):
 
   # Extract website name
 
-  sitename = extractWebSiteName(targetWebsite)
+  sitename = KastGenericFunctionsLib.extractWebSiteName(targetWebsite)
 
   # First generate the folder structure if its does not exist.
 
-  BASELOGDIR = chkmkFolderStructure(BASELOGDIR)
-  BASELOCKFILEDIR = chkmkFolderStructure(BASELOCKFILEDIR)
-  BASEFILESTORAGEDIR = chkmkFolderStructure(BASEFILESTORAGEDIR + sitename + '/')
-  BASEERRORLOGDIR = chkmkFolderStructure(BASEERRORLOGDIR)
-  BASECONTENTDIR = chkmkFolderStructure(BASECONTENTDIR)
+  BASELOGDIR = KastGenericFunctionsLib.chkmkFolderStructure(BASELOGDIR)
+  BASELOCKFILEDIR = KastGenericFunctionsLib.chkmkFolderStructure(BASELOCKFILEDIR)
+  BASEFILESTORAGEDIR = KastGenericFunctionsLib.chkmkFolderStructure(BASEFILESTORAGEDIR + sitename + '/')
+  BASEERRORLOGDIR = KastGenericFunctionsLib.chkmkFolderStructure(BASEERRORLOGDIR)
+  BASECONTENTDIR = KastGenericFunctionsLib.chkmkFolderStructure(BASECONTENTDIR)
 
   # Now generate the task/target specific filenames.
 
@@ -417,7 +421,7 @@ def main(targetWebsite, configFile):
   # Now check if the lock file exists and proceed with crawling.
 
   if os.path.exists(lockFile):
-    logException(sitename + ' crawl in progress - Exiting - ' + str(time.time()), BASELOGDIR + sitename + 'exit.log')
+    KastGenericFunctionsLib.logException(sitename + ' crawl in progress - Exiting - ' + str(time.time()), BASELOGDIR + sitename + 'exit.log')
     sys.exit(-1)
 
   # Make a lock file.
@@ -431,7 +435,7 @@ def main(targetWebsite, configFile):
 
   if targetWebsiteConfigs == {}:
 
-    logException('Target website configs could not extracted - ' + str(time.time()), errorLog)
+    KastGenericFunctionsLib.logException('Target website configs could not extracted - ' + str(time.time()), errorLog)
     sys.exit(-1)
 
   # Obtain the list of URLs from the above data structure and generate time domain
@@ -445,7 +449,7 @@ def main(targetWebsite, configFile):
 
   # Populate the unseenUrlList
 
-  unseenUrlList = populateUnseenUrlList(targetWebsite, unseenUrlList)
+  unseenUrlList = KastParsersLib.populateUnseenUrlList(targetWebsite, unseenUrlList)
   if unseenUrlList == []:
     logException('Seed URL List is malformed. Crawl engine is exiting - ' + str(time.time()), errorLog)
     sys.exit(-1)
@@ -472,7 +476,7 @@ def main(targetWebsite, configFile):
 
   # Now log all the information to AllegroGraphDB
 
-  store2db
+  store2db(nTriplesFile)
 
 # Make this as an executable script.
 
