@@ -501,7 +501,7 @@ def kastConfigFileParser(configFile):
 
   # Check if the configuartion file exists.
 
-  if not os.path.exists(config_file):
+  if not os.path.exists(configFile):
     return {}
   else:
 

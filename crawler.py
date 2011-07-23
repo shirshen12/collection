@@ -388,10 +388,6 @@ def store2db(datafile):
 
 def main(targetWebsite, configFile):
 
-  # Set debub true, turn off in production
-
-  pdb.set_trace()
-
   global unseenUrlList
   global BASELOGDIR
   global BASELOCKFILEDIR
@@ -413,6 +409,10 @@ def main(targetWebsite, configFile):
   BASECONTENTDIR = KastGenericFunctionsLib.chkmkFolderStructure(BASECONTENTDIR)
 
   # Now generate the task/target specific filenames.
+
+  # Set debub true, turn off in production
+
+  pdb.set_trace()
 
   lockFile = BASELOCKFILEDIR + sitename + '.lock'
   errorLog = BASEERRORLOGDIR + sitename + '.error'
