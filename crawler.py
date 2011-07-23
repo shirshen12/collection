@@ -491,6 +491,6 @@ if __name__ == '__main__':
   else:
     print ''
     print 'Usage: # <BASE_DIR>/crawler.py <FQDN of website to be crawled> <Absolute filename containing list of URLs and CSS rules>\n'
-    print '# /home/shirshendu/kast_collection/crawler.py http://www.bestbuy.com /home/shirshendu/bestbuy.json\n'
+    print '# /home/shirshendu/kast_collection/crawler.py http://www.bestbuy.com /home/shirshendu/Personal/collection/bestbuy.config\n'
     print ''
 
