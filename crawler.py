@@ -390,7 +390,7 @@ def main(targetWebsite, configFile):
 
   # Set debub true, turn off in production
 
-  # pdb.set_trace()
+  pdb.set_trace()
 
   global unseenUrlList
   global BASELOGDIR
@@ -426,7 +426,7 @@ def main(targetWebsite, configFile):
 
   # Make a lock file.
 
-  lf = f(lockFile, 'w')
+  lf = file(lockFile, 'w')
   lf.close()
 
   # Read the config file into a Dictionary/Hash structure.

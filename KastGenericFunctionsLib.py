@@ -29,7 +29,7 @@ def logException(event, fileName):
 
 def chkmkFolderStructure(folderStruct):
 
-  if os.path.exists(folderStruct):
+  if not os.path.exists(folderStruct):
     os.makedirs(folderStruct)
 
   return folderStruct
