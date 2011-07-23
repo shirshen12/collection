@@ -410,10 +410,6 @@ def main(targetWebsite, configFile):
 
   # Now generate the task/target specific filenames.
 
-  # Set debub true, turn off in production
-
-  pdb.set_trace()
-
   lockFile = BASELOCKFILEDIR + sitename + '.lock'
   errorLog = BASEERRORLOGDIR + sitename + '.error'
   contentLogFile = BASECONTENTDIR + sitename + '-' + str(round(time.time(), 2))
@@ -421,7 +417,7 @@ def main(targetWebsite, configFile):
   # Now check if the lock file exists and proceed with crawling.
 
   if os.path.exists(lockFile):
-    KastGenericFunctionsLib.logException(sitename + ' crawl in progress - Exiting - ' + str(time.time()), BASELOGDIR + sitename + 'exit.log')
+    KastGenericFunctionsLib.logException(sitename + ' crawl in progress - Exiting - ' + str(time.time()), BASELOGDIR + sitename + '.exit.log')
     sys.exit(-1)
 
   # Make a lock file.
@@ -430,6 +426,10 @@ def main(targetWebsite, configFile):
   lf.close()
 
   # Read the config file into a Dictionary/Hash structure.
+
+  # Set debub true, turn off in production
+
+  pdb.set_trace()
 
   targetWebsiteConfigs = KastParsersLib.kastConfigFileParser(configFile)
 
