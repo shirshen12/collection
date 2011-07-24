@@ -429,7 +429,7 @@ def main(targetWebsite, configFile):
 
   # Set debub true, turn off in production
 
-  pdb.set_trace()
+  # pdb.set_trace()
 
   targetWebsiteConfigs = KastParsersLib.kastConfigFileParser(configFile)
 

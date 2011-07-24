@@ -460,6 +460,8 @@ def zeroPad(ts, M):
 
 def calculateThresholdDftDistanceScore(samplePages):
 
+
+
   # Arrange the series in an adjacency graph format to keep track of computation.
 
   computationGraph = {}
@@ -469,16 +471,23 @@ def calculateThresholdDftDistanceScore(samplePages):
   seriesIndex = {}
 
   for i in range(len(samplePages)):
-    seriesIndex[rt + str(i)] = samplePages[i]
+    seriesIndex['rt' + str(i)] = samplePages[i]
 
   # Now construct the computation graph.
 
-  for j in len(0, seriesIndex):
-    computationGraph[rt + str(i)] = []
-    branchingFactor = len(seriesIndex) - j
+  for j in range(0, len(seriesIndex)):
+    computationGraph['rt' + str(j)] = []
+    branchingFactor = len(seriesIndex)
     for k in range(0, branchingFactor):
-      if (j + 1) < len(samplePages):
-        computationGraph[rt + str(i)].append('rt' + str(j + 1))
+      computationGraph['rt' + str(j)].append('rt' + str(k))
+
+  # Now form a unitary matrix and convert to Upper triangular matrix
+
+
+
+  # Debug is true.
+
+  pdb.set_trace()
 
   # Now for every node in the computation graph
 
