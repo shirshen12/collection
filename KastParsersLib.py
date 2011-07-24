@@ -460,11 +460,14 @@ def zeroPad(ts, M):
 
 def calculateThresholdDftDistanceScore(samplePages):
 
-
-
   # Arrange the series in an adjacency graph format to keep track of computation.
 
   computationGraph = {}
+
+  # Initialize computationGraph
+
+  for i in range(0, len(samplePages)):
+    computationGraph['rt' + str(i)] = []
 
   # Compute a series index {'rt1':[], 'rt2', []}
 
@@ -475,21 +478,54 @@ def calculateThresholdDftDistanceScore(samplePages):
 
   # Now construct the computation graph.
 
-  for j in range(0, len(seriesIndex)):
-    computationGraph['rt' + str(j)] = []
-    branchingFactor = len(seriesIndex)
-    for k in range(0, branchingFactor):
-      computationGraph['rt' + str(j)].append('rt' + str(k))
+  # Form a unitary matrix and convert to Upper triangular matrix
 
-  # Now form a unitary matrix and convert to Upper triangular matrix
+  array_1 = ones((len(samplePages), len(samplePages)))
 
+  # Now get upper triangular matrix
 
+  tri_upper = triu(array_1)
+
+  # Now fill the computation graph with values
+
+  for i in range(0, len(computationGraph)):
+    computationGraph['rt' + str(i)] = tri_upper[i].tolist()
+
+  # Convert every value to an int in the computationGraph matrix.
+
+  for i in range(0, len(computationGraph)):
+
+    tmp = computationGraph['rt' + str(i)]
+    tmp = [int(j) for j in tmp]
+    computationGraph['rt' + str(i)] = tmp
+
+  # Now multiply every computation graph array with the array elements.
+
+  for k in range(0, len(computationGraph)):
+    rt_index = 'rt' + str(k)
+    a = computationGraph[rt_index]
+    b = []
+    for j in range(0, len(computationGraph)):
+      b.append(('rt' + str(j))*a[j])
+    computationGraph[rt_index] = b
+
+  # Now clean the self indexed elements.
+
+  for i in computationGraph:
+    computationGraph[i].remove(i)
+
+  # Now also clean all empty strings
+
+  for i in computationGraph:
+    tmp = computationGraph[i]
+    tmp = [j for j in tmp if j != '']
+    computationGraph[i] = tmp
 
   # Debug is true.
 
   pdb.set_trace()
 
-  # Now for every node in the computation graph
+  # Now for every node in the computation graph calculate the DFT scores
 
   dftScores = []
 
