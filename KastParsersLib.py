@@ -277,11 +277,17 @@ def tagEncoder(tnames, rt):
     if count == 4899:
       pdb.set_trace()
     if i[2] == 'els':
-      tagEncodedHtmlSeries.append(int(tnamesHash[i[1]]))
+      try:
+        tagEncodedHtmlSeries.append(int(tnamesHash[i[1]]))
+      except KeyError, k:
+        continue
     elif i[2] == 'ele':
       tempEndTag = '<' + i[1].split('</')[1]
-      posnScore = tnamesHash[tempEndTag]
-      posnScore = (-1)*posnScore
+      try:
+        posnScore = tnamesHash[tempEndTag]
+        posnScore = (-1)*posnScore
+      except KeyError, k:
+        posnScore = 0
       tagEncodedHtmlSeries.append(posnScore)
 
   return tagEncodedHtmlSeries
