@@ -104,7 +104,7 @@ unseenUrlList = []
 
 # Global list of absolute URLs of a particular website that has been crawled.
 
-vistedUrlList = []
+visitedUrlList = []
 
 # This function gets returns a connection object with a triple store created
 # or renewed.
@@ -133,7 +133,7 @@ def crawl(targetWebsite):
   global sitename
   global errorLog
   global unseenUrlList
-  global vistedUrlList
+  global visitedUrlList
   global BASEFILESTORAGEDIR
 
   # Now start the crawling rountine.
@@ -156,7 +156,7 @@ def crawl(targetWebsite):
 
       # Write the content to a file, in the designated folder.
 
-      filename = KastGenericFunctionsLib.extractWebSiteName(page) + '-' + str(round(time.time(), 2))
+      filename = KastGenericFunctionsLib.extractWebSiteName(targetWebsite) + '-' + str(round(time.time(), 2))
       f = gzip.open(BASEFILESTORAGEDIR + filename + '.gz', 'wb')
       f.write(r)
       f.close()
@@ -177,7 +177,7 @@ def crawl(targetWebsite):
       # Now check how many of these links exist in Visited URL list.
 
       for link in unseenUrlListTmp:
-        if not vistedUrlList.__contains__(link):
+        if not visitedUrlList.__contains__(link):
           unseenUrlList.append(link)
 
       # Now append this page processed to visited URLs list.
@@ -189,6 +189,10 @@ def crawl(targetWebsite):
       unseenUrlList.remove(page)
 
       # Condition to end the crawl.
+
+      # Debug ON, turn off in production.
+
+      pdb.set_trace()
 
       if unseenUrlList == []:
         return
@@ -456,11 +460,11 @@ def main(targetWebsite, configFile):
 
   # Start crawling
 
-  crawl(targetWebsite, similarityMeasure)
+  crawl(targetWebsite)
 
   # Now apply the Page classification algorithm to preserve only the pages of interest.
 
-  classify(htmlSeries)
+  classify(htmlSeries, similarityMeasure)
 
   # Apply the CSS rules for scrapping content, this will serve as a simple rule engine template.
 

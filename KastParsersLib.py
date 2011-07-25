@@ -270,12 +270,7 @@ def tagEncoder(tnames, rt):
 
   tagEncodedHtmlSeries = []
 
-  count = 0
   for i in rt:
-    count = count + 1
-    print count
-    if count == 4899:
-      pdb.set_trace()
     if i[2] == 'els':
       try:
         tagEncodedHtmlSeries.append(int(tnamesHash[i[1]]))
@@ -531,10 +526,6 @@ def calculateThresholdDftDistanceScore(samplePages):
     tmp = computationGraph[i]
     tmp = [j for j in tmp if j != '']
     computationGraph[i] = tmp
-
-  # Debug is true.
-
-  # pdb.set_trace()
 
   # Now for every node in the computation graph calculate the DFT scores
 
