@@ -115,15 +115,19 @@ def getServerConnection(accessMode):
   #server = AllegroGraphServer("localhost", port=AG_PORT, user="test", password="xyzzy")
 
   # For localhost.
+
+  # Get a server object.
   server = AllegroGraphServer("localhost", port=AG_PORT)
 
+  # Get a catalog object.
   catalog = server.openCatalog('scratch')
-  #print "Available repositories in catalog '%s':  %s" % (catalog.getName(), catalog.listRepositories())
 
-  myRepository = catalog.getRepository("agraph_test", accessMode)
+  # Create a new or access an existing repository and get a connection object.
+  myRepository = catalog.getRepository("kast_data", accessMode)
   myRepository.initialize()
   connection = myRepository.getConnection()
-  #print "Repository %s is up!  It contains %i statements." % (myRepository.getDatabaseName(), connection.size())
+
+  # Return the connection object.
   return connection
 
 # This function downloads the pages in a BFS manner.
