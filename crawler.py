@@ -27,7 +27,7 @@
 
 # Programmer: Shirshendu Chakrabarti
 # Created at: 2011-June-13
-# Modified  : 2011-July-18
+# Modified  : 2011-July-27
 
 # Import System module dependencies here.
 
@@ -36,6 +36,7 @@ import sys # Provides general system calls interface
 import time # Provides time operations
 import random # Provides random number generation
 import urllib2 # HTTP client library
+import string # String operations module
 import pdb # Debug Module
 
 # CSS Rule engine on the lines of jQuery Javascript library.
@@ -131,6 +132,7 @@ def getServerConnection(accessMode):
   return connection
 
 # This function downloads the pages in a BFS manner.
+# We may need to parallize this script.
 
 def crawl(targetWebsite):
 
@@ -160,7 +162,9 @@ def crawl(targetWebsite):
 
       # Write the content to a file, in the designated folder.
 
-      filename = KastGenericFunctionsLib.extractWebSiteName(targetWebsite) + '-' + str(round(time.time(), 2))
+      filename = KastGenericFunctionsLib.extractWebSiteName(page) + '-' + str(round(time.time(), 2))
+      # Replace all '/' with [kastSlash]
+      filename = string.replace(filename, '/', '[kastSlash]')
       f = gzip.open(BASEFILESTORAGEDIR + filename + '.gz', 'wb')
       f.write(r)
       f.close()
@@ -434,10 +438,6 @@ def main(targetWebsite, configFile):
   lf.close()
 
   # Read the config file into a Dictionary/Hash structure.
-
-  # Set debub true, turn off in production
-
-  # pdb.set_trace()
 
   targetWebsiteConfigs = KastParsersLib.kastConfigFileParser(configFile)
 
