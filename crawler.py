@@ -107,6 +107,10 @@ unseenUrlList = []
 
 visitedUrlList = []
 
+# A global variable to make sure lock files are not generated in testmode.
+
+mode = 't'
+
 # This function gets returns a connection object with a triple store created
 # or renewed.
 
@@ -411,6 +415,7 @@ def main(targetWebsite, configFile):
   global BASEERRORLOGDIR
   global BASECONTENTDIR
   global contentLogFile
+  global mode
 
   # Extract website name
 
@@ -438,8 +443,10 @@ def main(targetWebsite, configFile):
 
   # Make a lock file.
 
-  lf = file(lockFile, 'w')
-  lf.close()
+  if mode == 'p':
+
+    lf = file(lockFile, 'w')
+    lf.close()
 
   # Read the config file into a Dictionary/Hash structure.
 
