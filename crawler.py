@@ -293,6 +293,10 @@ def extractContent(rules):
 
     record = []
 
+    # Replace [kastSlash] with '/' when we will store and process data.
+
+    f = string.replace(f, '[kastSlash]', '/')
+
     # Append the name of the file, because it serves as value for product location
 
     record.append(f.split('/')[-1])
